@@ -6,16 +6,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import nl.ordina.digikoppeling.ebf.validator.ValidatorException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 
 public class TransformDirToPDFs
 {
 	protected transient Log logger = LogFactory.getLog(this.getClass());
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 		if (args.length != 1)
 		{
@@ -27,26 +27,20 @@ public class TransformDirToPDFs
 			files.forEach(f ->
 			{
 				System.out.println(f.getFileName().toString());
-				//boolean expectedResult = f.getFileName().toString().contains("ok");
 				try
 				{
-					TransformFileToPDF.validateAndTransform(f.toString());
+					TransformFileToPDF.transform(f.toString());
 					System.out.println("Message valid.");
 				}
-				catch (ValidatorException e)
+				catch (ValidationException e)
 				{
 					System.out.println("Message invalid:" + e.getMessage());
-					e.printStackTrace();
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					System.out.println("An unexpected error occurred: " + e.getMessage());
 				}
 			});
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
 		}
 	}
 

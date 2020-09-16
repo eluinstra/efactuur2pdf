@@ -14,18 +14,19 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.saxon.TransformerFactoryImpl;
-import net.sf.saxon.event.PipelineConfiguration;
-import net.sf.saxon.event.Receiver;
-import net.sf.saxon.om.NamespaceBinding;
-import net.sf.saxon.om.NodeName;
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.type.SchemaType;
-import net.sf.saxon.type.SimpleType;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.om.AttributeMap;
+import net.sf.saxon.om.NamespaceMap;
+import net.sf.saxon.om.NodeName;
+import net.sf.saxon.s9api.Location;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.type.SchemaType;
 
 public class XSLTransformer
 {
@@ -36,59 +37,62 @@ public class XSLTransformer
 
 	private Receiver receiver = new Receiver()
 	{
+		@Override
 		public String getSystemId()
 		{
 			return null;
 		}
-		public void attribute(NodeName attName, SimpleType typeCode, CharSequence value, int locationId, int properties) throws XPathException
+		@Override
+		public void characters(CharSequence chars, Location location, int properties) throws XPathException
 		{
+			xslErrors.append(chars);
 		}
-		public void characters(CharSequence arg0, int arg1, int arg2) throws XPathException
-		{
-			xslErrors.append(arg0);
-		}
+		@Override
 		public void close() throws XPathException
 		{
 		}
-		public void comment(CharSequence arg0, int arg1, int arg2) throws XPathException
+		@Override
+		public void comment(CharSequence content, Location location, int properties) throws XPathException
 		{
 		}
+		@Override
 		public void endDocument() throws XPathException
 		{
 		}
+		@Override
 		public void endElement() throws XPathException
 		{
 		}
+		@Override
 		public PipelineConfiguration getPipelineConfiguration()
 		{
 			return null;
 		}
-		public void namespace(NamespaceBinding namespaceBinding, int properties) throws XPathException
-		{
-		}
+		@Override
 		public void open() throws XPathException
 		{
 		}
-		public void processingInstruction(String arg0, CharSequence arg1, int arg2, int arg3) throws XPathException
+		@Override
+		public void processingInstruction(String name, CharSequence data, Location location, int properties) throws XPathException
 		{
 		}
+		@Override
 		public void setPipelineConfiguration(PipelineConfiguration arg0)
 		{
 		}
+		@Override
 		public void setSystemId(String arg0)
 		{
 		}
+		@Override
 		public void setUnparsedEntity(String arg0, String arg1, String arg2) throws XPathException
-		{
-		}
-		public void startContent() throws XPathException
 		{
 		}
 		public void startDocument(int arg0) throws XPathException
 		{
 		}
 		@Override
-		public void startElement(NodeName elemName, SchemaType typeCode, int locationId, int properties) throws XPathException
+		public void startElement(NodeName elemName, SchemaType type, AttributeMap attributes, NamespaceMap namespaces, Location location, int properties) throws XPathException
 		{
 		}
 		@Override

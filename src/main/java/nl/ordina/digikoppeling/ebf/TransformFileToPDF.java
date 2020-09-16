@@ -18,37 +18,31 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.saxon.TransformerFactoryImpl;
-import net.sf.saxon.lib.StandardErrorListener;
-import nl.clockwork.efactuur.Constants;
-import nl.clockwork.efactuur.DigikoppelingVersionHelper;
-import nl.clockwork.efactuur.VersionNotFoundException;
-import nl.ordina.digikoppeling.ebf.model.MessageVersion;
-import nl.ordina.digikoppeling.ebf.processor.MessageParser;
-import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceGenericodeValidator;
-import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceSchematronValidator;
-import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceXSDValidator;
-import nl.ordina.digikoppeling.ebf.validator.StringLogger;
-import nl.ordina.digikoppeling.ebf.validator.ValidationException;
-import nl.ordina.digikoppeling.ebf.validator.ValidatorException;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
+import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.lib.StandardErrorListener;
+import nl.clockwork.efactuur.DigikoppelingVersionHelper;
+import nl.clockwork.efactuur.VersionNotFoundException;
+import nl.ordina.digikoppeling.ebf.model.MessageVersion;
+import nl.ordina.digikoppeling.ebf.processor.MessageParser;
+import nl.ordina.digikoppeling.ebf.validator.StringLogger;
+import nl.ordina.digikoppeling.ebf.validator.ValidationException;
+
 public class TransformFileToPDF
 {
 	private Templates errorTemplates;
-	private boolean failOnWarning;
 
 	public TransformFileToPDF() throws TransformerConfigurationException
 	{
 		errorTemplates = getSaxonXslTemplates("/nl/ordina/digikoppeling/ebf/xslt/ErrorToPDF.xsl");
 	}
 
-	protected static void validateAndTransform(String filename) throws Exception
+	protected static void transform(String filename) throws Exception
 	{
 		byte[] content = IOUtils.toByteArray(new FileInputStream(filename));
 		MessageVersion messageVersion = new MessageParser().getMessageVersion(content);
@@ -56,34 +50,11 @@ public class TransformFileToPDF
 		System.out.println("MessageFormat: " + messageVersion.getFormat());
 		System.out.println("MessageVersion: " + messageVersion.getVersion());
 		TransformFileToPDF messageTransformer = new TransformFileToPDF();
-		try
-		{
-			messageTransformer.validate(content,messageVersion);
-		}
-		catch (ValidationException e)
-		{
-			e.printStackTrace();
-		}
 		content = messageTransformer.transformToCanonical(content,messageVersion);
 		content = messageTransformer.transformCanonicalToPDF(content,"1",messageVersion,"E-Factuur");
 		IOUtils.write(content,new FileOutputStream(filename + ".pdf"));
 	}
 	
-	public void validate(byte[] content, MessageVersion messageVersion) throws ValidatorException
-	{
-		DynamicInvoiceXSDValidator xsdValidator = new DynamicInvoiceXSDValidator();
-		xsdValidator.setVersionResolver(new DigikoppelingVersionHelper());
-		xsdValidator.validate(content,messageVersion);
-		DynamicInvoiceSchematronValidator schematronValidator = new DynamicInvoiceSchematronValidator(new DigikoppelingVersionHelper(),failOnWarning);
-		schematronValidator.validate(content,messageVersion);
-		if (messageVersion.getFormat().equals(Constants.MessageFormat.UBL))
-		{
-			DynamicInvoiceGenericodeValidator genericodeValidator = new DynamicInvoiceGenericodeValidator();
-			genericodeValidator.setVersionResolver(new DigikoppelingVersionHelper());
-			genericodeValidator.validate(content,messageVersion);
-		}
-	}
-
 	public byte[] transformToCanonical(byte[] content, MessageVersion messageVersion) throws ValidationException, IOException, javax.xml.transform.TransformerException, VersionNotFoundException
 	{
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -160,6 +131,6 @@ public class TransformFileToPDF
 			System.out.println("Usage: TransformFileToPDF <filename>");
 			return;
 		}
-		TransformFileToPDF.validateAndTransform(args[0]);
+		TransformFileToPDF.transform(args[0]);
 	}
 }

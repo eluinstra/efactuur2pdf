@@ -53,16 +53,18 @@ public class ValidateDir
 		}
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 		if (args.length != 1)
 		{
 			System.out.println("Usage: ValidateDir <directory>");
 			return;
 		}
-		try (Stream<Path> files = Files.list(Paths.get(args[0])))
+		Path filename = Paths.get(args[0]);
+		try (Stream<Path> files = Files.list(filename))
 		{
 			files.filter(f-> f.getFileName().toString().endsWith(".xml"))
+			.sorted()
 			.forEach(f ->
 			{
 				System.out.println(f.getFileName().toString());
@@ -71,20 +73,15 @@ public class ValidateDir
 					new ValidateDir().validate(IOUtils.toByteArray(new FileInputStream(f.toFile())));
 					System.out.println("Message valid.");
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-				catch (ValidatorException e)
+				catch (ValidationException e)
 				{
 					System.out.println("Message invalid: " + e.getMessage());
-					//e.printStackTrace();
+				}
+				catch (Exception e)
+				{
+					System.out.println("An unexpected error occurred: " + e.getMessage());
 				}
 			});
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
 		}
 	}
 }

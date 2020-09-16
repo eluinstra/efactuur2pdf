@@ -1,6 +1,7 @@
 package nl.ordina.digikoppeling.ebf;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import nl.clockwork.efactuur.Constants;
@@ -54,11 +55,11 @@ public class ValidateFile
 		}
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws FileNotFoundException, ValidatorException, IOException
 	{
 		if (args.length != 1)
 		{
-			System.out.println("Usage: MessageValidator <filename>");
+			System.out.println("Usage: ValidateFile <filename>");
 			return;
 		}
 		try
@@ -66,14 +67,9 @@ public class ValidateFile
 			new ValidateFile().validate(IOUtils.toByteArray(new FileInputStream(args[0])));
 			System.out.println("Message valid.");
 		}
-		catch (IOException e)
+		catch (ValidationException e)
 		{
-			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Message invalid:");
-			e.printStackTrace();
+			System.out.println("Message invalid: " + e.getMessage());
 			EBFError ebfError = new EBFErrorTransformer().transform(e);
 			System.out.println(ebfError.getFoutcode());
 			System.out.println(ebfError.getFoutbeschrijving());
