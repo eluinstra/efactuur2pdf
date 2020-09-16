@@ -4,13 +4,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
+
+import lombok.AccessLevel;
+import lombok.val;
+import lombok.experimental.FieldDefaults;
 import nl.clockwork.efactuur.Constants;
 import nl.clockwork.efactuur.DigikoppelingVersionHelper;
-import nl.ordina.digikoppeling.ebf.model.EBFError;
-import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.processor.MessageParser;
 import nl.ordina.digikoppeling.ebf.processor.ParseException;
-import nl.ordina.digikoppeling.ebf.transformer.EBFErrorTransformer;
 import nl.ordina.digikoppeling.ebf.validator.CustomValidator;
 import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceGenericodeValidator;
 import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceSchematronValidator;
@@ -18,42 +20,10 @@ import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceXSDValidator;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 import nl.ordina.digikoppeling.ebf.validator.ValidatorException;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-public class ValidateFile
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class ValidateFile implements SystemInterface
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
-	private boolean failOnWarning = false;
-
-	public void validate(byte[] content) throws ValidatorException
-	{
-		try
-		{
-			MessageVersion messageVersion = new MessageParser().getMessageVersion(content);
-			System.out.println("MessageType: " + messageVersion.getType());
-			System.out.println("MessageFormat: " + messageVersion.getFormat());
-			System.out.println("MessageVersion: " + messageVersion.getVersion());
-			DynamicInvoiceXSDValidator xsdValidator = new DynamicInvoiceXSDValidator();
-			xsdValidator.setVersionResolver(new DigikoppelingVersionHelper());
-			xsdValidator.validate(content,messageVersion);
-			DynamicInvoiceSchematronValidator schematronValidator = new DynamicInvoiceSchematronValidator(new DigikoppelingVersionHelper(),failOnWarning);
-			schematronValidator.validate(content,messageVersion);
-			if (messageVersion.getFormat().equals(Constants.MessageFormat.UBL))
-			{
-				DynamicInvoiceGenericodeValidator genericodeValidator = new DynamicInvoiceGenericodeValidator();
-				genericodeValidator.setVersionResolver(new DigikoppelingVersionHelper());
-				genericodeValidator.validate(content,messageVersion);
-				CustomValidator customValidator = new CustomValidator();
-				customValidator.validate(content);
-			}
-		}
-		catch (ParseException e)
-		{
-			throw new ValidationException(e);
-		}
-	}
+	boolean failOnWarning = false;
 
 	public static void main(String[] args) throws FileNotFoundException, ValidatorException, IOException
 	{
@@ -62,17 +32,47 @@ public class ValidateFile
 			System.out.println("Usage: ValidateFile <filename>");
 			return;
 		}
+		new ValidateFile().validate(args[0]);
+	}
+
+	public void validate(String filename) throws ValidatorException, IOException, FileNotFoundException
+	{
 		try
 		{
-			new ValidateFile().validate(IOUtils.toByteArray(new FileInputStream(args[0])));
-			System.out.println("Message valid.");
+			new ValidateFile().validate(IOUtils.toByteArray(new FileInputStream(filename)));
+			println("Message valid.");
 		}
 		catch (ValidationException e)
 		{
-			System.out.println("Message invalid: " + e.getMessage());
-			EBFError ebfError = new EBFErrorTransformer().transform(e);
-			System.out.println(ebfError.getFoutcode());
-			System.out.println(ebfError.getFoutbeschrijving());
+			println("Message invalid: " + e.getMessage());
+		}
+	}
+
+	private void validate(byte[] content) throws ValidatorException
+	{
+		try
+		{
+			val messageVersion = new MessageParser().getMessageVersion(content);
+			println("MessageType: " + messageVersion.getType());
+			println("MessageFormat: " + messageVersion.getFormat());
+			println("MessageVersion: " + messageVersion.getVersion());
+			val xsdValidator = new DynamicInvoiceXSDValidator();
+			xsdValidator.setVersionResolver(new DigikoppelingVersionHelper());
+			xsdValidator.validate(content,messageVersion);
+			val schematronValidator = new DynamicInvoiceSchematronValidator(new DigikoppelingVersionHelper(),failOnWarning);
+			schematronValidator.validate(content,messageVersion);
+			if (messageVersion.getFormat().equals(Constants.MessageFormat.UBL))
+			{
+				val genericodeValidator = new DynamicInvoiceGenericodeValidator();
+				genericodeValidator.setVersionResolver(new DigikoppelingVersionHelper());
+				genericodeValidator.validate(content,messageVersion);
+				val customValidator = new CustomValidator();
+				customValidator.validate(content);
+			}
+		}
+		catch (ParseException e)
+		{
+			throw new ValidationException(e);
 		}
 	}
 }

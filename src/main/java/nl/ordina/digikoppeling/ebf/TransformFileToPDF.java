@@ -10,20 +10,23 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Locale;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.FOPException;
-import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.FieldDefaults;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.lib.StandardErrorListener;
 import nl.clockwork.efactuur.DigikoppelingVersionHelper;
@@ -33,80 +36,107 @@ import nl.ordina.digikoppeling.ebf.processor.MessageParser;
 import nl.ordina.digikoppeling.ebf.validator.StringLogger;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 
-public class TransformFileToPDF
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class TransformFileToPDF implements SystemInterface
 {
-	private Templates errorTemplates;
+	@NonNull
+	Templates errorTemplates;
 
 	public TransformFileToPDF() throws TransformerConfigurationException
 	{
 		errorTemplates = getSaxonXslTemplates("/nl/ordina/digikoppeling/ebf/xslt/ErrorToPDF.xsl");
 	}
 
-	protected static void transform(String filename) throws Exception
+	public static void main(String[] args) throws Exception
 	{
-		byte[] content = IOUtils.toByteArray(new FileInputStream(filename));
-		MessageVersion messageVersion = new MessageParser().getMessageVersion(content);
-		System.out.println("MessageType: " + messageVersion.getType());
-		System.out.println("MessageFormat: " + messageVersion.getFormat());
-		System.out.println("MessageVersion: " + messageVersion.getVersion());
-		TransformFileToPDF messageTransformer = new TransformFileToPDF();
-		content = messageTransformer.transformToCanonical(content,messageVersion);
-		content = messageTransformer.transformCanonicalToPDF(content,"1",messageVersion,"E-Factuur");
-		IOUtils.write(content,new FileOutputStream(filename + ".pdf"));
+		if (args.length != 1)
+		{
+			System.out.println("Usage: TransformFileToPDF <filename>");
+			return;
+		}
+		new TransformFileToPDF().transform(args[0]);
+	}
+
+	public void transform(String filename) throws Exception
+	{
+		val content = IOUtils.toByteArray(new FileInputStream(filename));
+		val messageVersion = new MessageParser().getMessageVersion(content);
+		println("MessageType: " + messageVersion.getType());
+		println("MessageFormat: " + messageVersion.getFormat());
+		println("MessageVersion: " + messageVersion.getVersion());
+		val pdf = createPDF(content,messageVersion);
+		IOUtils.write(pdf,new FileOutputStream(filename + ".pdf"));
+		println("PDF file " + filename + ".pdf created");
+	}
+
+	private byte[] createPDF(final byte[] content, final MessageVersion messageVersion) throws TransformerConfigurationException, ValidationException, IOException, TransformerException, VersionNotFoundException, FOPException
+	{
+		val messageTransformer = new TransformFileToPDF();
+		val canonical = messageTransformer.transformToCanonical(content,messageVersion);
+		return messageTransformer.transformCanonicalToPDF(canonical,"1",messageVersion,"E-Factuur");
 	}
 	
-	public byte[] transformToCanonical(byte[] content, MessageVersion messageVersion) throws ValidationException, IOException, javax.xml.transform.TransformerException, VersionNotFoundException
+	private byte[] transformToCanonical(byte[] content, MessageVersion messageVersion) throws ValidationException, IOException, javax.xml.transform.TransformerException, VersionNotFoundException
 	{
-		ByteArrayOutputStream result = new ByteArrayOutputStream();
-		Templates templates = getSaxonXslTemplates(new DigikoppelingVersionHelper().getInvoiceToCanonicalPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
+		val result = new ByteArrayOutputStream();
+		val templates = getSaxonXslTemplates(new DigikoppelingVersionHelper().getInvoiceToCanonicalPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
 		templates.newTransformer().transform(new StreamSource(new ByteArrayInputStream(content)),new StreamResult(result));
 		result.flush();
 		return result.toByteArray();
 	}
 
-	public byte[] transformCanonicalToPDF(byte[] content, String messageId, MessageVersion messageVersion, String berichtSoort) throws IOException, javax.xml.transform.TransformerException, FOPException, VersionNotFoundException
+	private byte[] transformCanonicalToPDF(byte[] content, String messageId, MessageVersion messageVersion, String berichtSoort) throws IOException, javax.xml.transform.TransformerException, FOPException, VersionNotFoundException
 	{
-		ByteArrayOutputStream result = new ByteArrayOutputStream();
-		StreamSource src = new StreamSource(new ByteArrayInputStream(content));
-		FopFactory fopFactory = FopFactory.newInstance();
-		try (OutputStream out = new BufferedOutputStream(result))
+		val result = new ByteArrayOutputStream();
+		val src = new StreamSource(new ByteArrayInputStream(content));
+		val fopFactory = FopFactory.newInstance();
+		try (val out = new BufferedOutputStream(result))
 		{
-			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF,out);
-			Templates templates = getSaxonXslTemplates(new DigikoppelingVersionHelper().getCanonicalToPDFPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
-			Transformer transformer = templates.newTransformer();
-			StringLogger logger = addStringLogger(transformer);
-			setParameters(transformer,messageId,messageVersion,berichtSoort);
-			Result r = new SAXResult(fop.getDefaultHandler());
+			val fop = fopFactory.newFop(MimeConstants.MIME_PDF,out);
+			val templates = getSaxonXslTemplates(new DigikoppelingVersionHelper().getCanonicalToPDFPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
+			val transformer = createTransformer(templates,messageId,messageVersion,berichtSoort);
+			val r = new SAXResult(fop.getDefaultHandler());
 			try
 			{
 				transformer.transform(src,r);
+				return result.toByteArray();
 			}
 			catch (javax.xml.transform.TransformerException e)
 			{
-				System.out.println(logger.getLog());
-				e.printStackTrace();
-				result = new ByteArrayOutputStream();
-				try (OutputStream errorOut = new BufferedOutputStream(result))
-				{
-					fop = fopFactory.newFop(MimeConstants.MIME_PDF,errorOut);
-					Transformer errorTransformer = errorTemplates.newTransformer();
-					setParameters(errorTransformer,messageId,messageVersion,berichtSoort);
-					r = new SAXResult(fop.getDefaultHandler());
-					src = new StreamSource(new ByteArrayInputStream(("<error>" + logger.getLog() + "</error>").getBytes()));
-					errorTransformer.transform(src,r);
-				}
+				val logger = addStringLogger(transformer);
+				println("The following transformation errors occurred:\n" + logger.getLog());
+				return handleTransformerException(createTransformer(errorTemplates,messageId,messageVersion,berichtSoort),fopFactory,logger);
 			}
+		}
+	}
+
+	private byte[] handleTransformerException(Transformer errorTransformer, FopFactory fopFactory, StringLogger logger) throws FOPException, TransformerConfigurationException, TransformerException, IOException
+	{
+		val result = new ByteArrayOutputStream();
+		try (OutputStream errorOut = new BufferedOutputStream(result))
+		{
+			val fop = fopFactory.newFop(MimeConstants.MIME_PDF,errorOut);
+			val r = new SAXResult(fop.getDefaultHandler());
+			val src = new StreamSource(new ByteArrayInputStream(("<error>" + logger.getLog() + "</error>").getBytes()));
+			errorTransformer.transform(src,r);
 		}
 		return result.toByteArray();
 	}
 
 	private StringLogger addStringLogger(Transformer transformer)
 	{
-		StandardErrorListener listener = new StandardErrorListener();
-		StringLogger logger = new StringLogger();
+		val listener = new StandardErrorListener();
+		val logger = new StringLogger();
 		listener.setLogger(logger);
 		transformer.setErrorListener(listener);
 		return logger;
+	}
+
+	private Transformer createTransformer(Templates templates, String messageId, MessageVersion messageVersion, String berichtSoort) throws TransformerConfigurationException
+	{
+		val result = templates.newTransformer();
+		setParameters(result,messageId,messageVersion,berichtSoort);
+		return result;
 	}
 
 	private void setParameters(Transformer transformer, String messageId, MessageVersion messageVersion, String berichtSoort)
@@ -119,18 +149,8 @@ public class TransformFileToPDF
 		transformer.setParameter("original_message_type",messageVersion.getFormat().toString());
 	}
 
-	public Templates getSaxonXslTemplates(String xslFile) throws TransformerConfigurationException
+	private Templates getSaxonXslTemplates(String xslFile) throws TransformerConfigurationException
 	{
-		return new TransformerFactoryImpl().newTemplates(new StreamSource(this.getClass().getResourceAsStream(xslFile),this.getClass().getResource(xslFile).toString()));
-	}
-
-	public static void main(String[] args) throws Exception
-	{
-		if (args.length != 1)
-		{
-			System.out.println("Usage: TransformFileToPDF <filename>");
-			return;
-		}
-		TransformFileToPDF.transform(args[0]);
+		return new TransformerFactoryImpl().newTemplates(new StreamSource(getClass().getResourceAsStream(xslFile),getClass().getResource(xslFile).toString()));
 	}
 }

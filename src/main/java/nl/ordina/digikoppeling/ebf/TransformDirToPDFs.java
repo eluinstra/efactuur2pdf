@@ -6,42 +6,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import nl.ordina.digikoppeling.ebf.validator.ValidationException;
-
-public class TransformDirToPDFs
+public class TransformDirToPDFs implements SystemInterface
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
-
 	public static void main(String[] args) throws IOException
 	{
 		if (args.length != 1)
 		{
-			System.out.println("Usage: TransformDirToPDFs <directory>");
+			System.out.println("Usage: TransformDirToPDFs <path>");
 			return;
 		}
-		try (Stream<Path> files = Files.list(Paths.get(args[0])))
+		new TransformDirToPDFs().transform(args[0]);
+	}
+
+	private void transform(String path) throws IOException
+	{
+		try (Stream<Path> files = Files.list(Paths.get(path)))
 		{
-			files.forEach(f ->
+			files.filter(f-> f.getFileName().toString().endsWith(".xml"))
+			.sorted()
+			.forEach(f ->
 			{
-				System.out.println(f.getFileName().toString());
+				println(f.getFileName().toString());
 				try
 				{
-					TransformFileToPDF.transform(f.toString());
-					System.out.println("Message valid.");
-				}
-				catch (ValidationException e)
-				{
-					System.out.println("Message invalid:" + e.getMessage());
+					new TransformFileToPDF().transform(f.toString());
 				}
 				catch (Exception e)
 				{
-					System.out.println("An unexpected error occurred: " + e.getMessage());
+					println("An unexpected error occurred: " + e.getMessage());
 				}
 			});
 		}
 	}
-
 }
