@@ -3,10 +3,12 @@ package nl.ordina.digikoppeling.ebf;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -22,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.xml.sax.SAXException;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -69,7 +72,7 @@ public class TransformFileToPDF implements SystemInterface
 		println("PDF file " + filename + ".pdf created");
 	}
 
-	private byte[] createPDF(final byte[] content, final MessageVersion messageVersion) throws TransformerConfigurationException, ValidationException, IOException, TransformerException, VersionNotFoundException, FOPException
+	private byte[] createPDF(final byte[] content, final MessageVersion messageVersion) throws TransformerConfigurationException, ValidationException, IOException, TransformerException, VersionNotFoundException, SAXException, URISyntaxException
 	{
 		val messageTransformer = new TransformFileToPDF();
 		val canonical = messageTransformer.transformToCanonical(content,messageVersion);
@@ -85,11 +88,11 @@ public class TransformFileToPDF implements SystemInterface
 		return result.toByteArray();
 	}
 
-	private byte[] transformCanonicalToPDF(byte[] content, String messageId, MessageVersion messageVersion, String berichtSoort) throws IOException, javax.xml.transform.TransformerException, FOPException, VersionNotFoundException
+	private byte[] transformCanonicalToPDF(byte[] content, String messageId, MessageVersion messageVersion, String berichtSoort) throws IOException, javax.xml.transform.TransformerException, VersionNotFoundException, SAXException, URISyntaxException
 	{
 		val result = new ByteArrayOutputStream();
 		val src = new StreamSource(new ByteArrayInputStream(content));
-		val fopFactory = FopFactory.newInstance();
+		val fopFactory = FopFactory.newInstance(new File(".").toURI());
 		try (val out = new BufferedOutputStream(result))
 		{
 			val fop = fopFactory.newFop(MimeConstants.MIME_PDF,out);
@@ -99,7 +102,6 @@ public class TransformFileToPDF implements SystemInterface
 			try
 			{
 				transformer.transform(src,r);
-				return result.toByteArray();
 			}
 			catch (javax.xml.transform.TransformerException e)
 			{
@@ -108,6 +110,7 @@ public class TransformFileToPDF implements SystemInterface
 				return handleTransformerException(createTransformer(errorTemplates,messageId,messageVersion,berichtSoort),fopFactory,logger);
 			}
 		}
+		return result.toByteArray();
 	}
 
 	private byte[] handleTransformerException(Transformer errorTransformer, FopFactory fopFactory, StringLogger logger) throws FOPException, TransformerConfigurationException, TransformerException, IOException
