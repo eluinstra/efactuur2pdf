@@ -1,4 +1,4 @@
-efactuur2pdf provides:
+### efactuur2pdf
 
 - PDF generation for UBL or SETU invoice documents (efacturen)
 - XSD, Schematron and Genericode validation for EBF messages
@@ -17,10 +17,17 @@ The following HR-XML-NL and UBL-NL message versions are currently supported in t
 - SETU Invoice 1.6.4
 - SETU Invoice 1.1
 
-Usage:
+### Usage
 
-Validate File:
-java -jar efactuur2pdf-2.0.0.jar nl.ordina.digikoppeling.ebf.ValidateFile <filename>
+Validate file  
+`java -jar efactuur2pdf-2.0.0.jar nl.ordina.digikoppeling.ebf.ValidateFile <filename>`
 
-Transform File:
-java -jar efactuur2pdf-2.0.0.jar nl.ordina.digikoppeling.ebf.TransformFileToPDF <filename>
+Validate all files in directory  
+`java -jar efactuur2pdf-2.0.0.jar nl.ordina.digikoppeling.ebf.ValidateDir <path>`
+
+Transform file  
+`java -jar efactuur2pdf-2.0.0.jar nl.ordina.digikoppeling.ebf.TransformFileToPDF <filename>`
+
+Transform all files in directory  
+`java -jar efactuur2pdf-2.0.0.jar nl.ordina.digikoppeling.ebf.TransformDirToPDFs <path>`
+
