@@ -19,14 +19,10 @@ import javax.xml.transform.TransformerException;
 
 import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
 
 public class CustomValidator
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
-
 	public void validate(byte[] xml) throws ValidatorException
 	{
 		XSLTransformer transformer = null;

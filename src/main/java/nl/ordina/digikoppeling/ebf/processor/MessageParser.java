@@ -26,13 +26,8 @@ import nl.clockwork.efactuur.Constants.MessageFormat;
 import nl.clockwork.efactuur.Constants.MessageType;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class MessageParser
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
-
 	public MessageVersion getMessageVersion(byte[] message) throws ParseException
 	{
 		XMLInputFactory factory = XMLInputFactory.newInstance();

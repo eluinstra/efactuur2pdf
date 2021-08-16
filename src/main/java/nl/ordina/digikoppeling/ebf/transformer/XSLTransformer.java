@@ -30,8 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.event.PipelineConfiguration;
@@ -45,7 +43,6 @@ import net.sf.saxon.type.SchemaType;
 
 public class XSLTransformer
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
 	private static Map<String,XSLTransformer> transformers = new HashMap<String,XSLTransformer>();
 	private Templates templates;
 	private StringBuffer xslErrors;

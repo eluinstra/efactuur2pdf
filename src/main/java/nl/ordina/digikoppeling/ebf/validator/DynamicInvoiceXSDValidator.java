@@ -27,14 +27,11 @@ import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
 
 public class DynamicInvoiceXSDValidator
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
 	private VersionHelper versionResolver;
 
 	public void validate(byte[] content, MessageVersion messageType) throws ValidatorException

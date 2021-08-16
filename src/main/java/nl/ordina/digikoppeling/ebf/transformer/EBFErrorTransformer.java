@@ -19,15 +19,12 @@ import nl.ordina.digikoppeling.ebf.AFSErrorCode;
 import nl.ordina.digikoppeling.ebf.model.EBFError;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 public class EBFErrorTransformer
 {
-	protected transient Log logger = LogFactory.getLog(getClass());
 
 	public EBFError transform(Exception e)
 	{

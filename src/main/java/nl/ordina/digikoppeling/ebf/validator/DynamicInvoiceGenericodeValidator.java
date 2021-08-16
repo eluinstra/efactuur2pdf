@@ -22,35 +22,27 @@ import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
+
+import io.vavr.control.Try;
+import lombok.val;
 
 public class DynamicInvoiceGenericodeValidator
 {
-	protected transient Log logger = LogFactory.getLog(this.getClass());
 	private VersionHelper versionResolver;
 
 	public void validate(byte[] xml, MessageVersion messageType) throws ValidatorException
 	{
-		XSLTransformer transformer = null;
 		try
 		{
-			String xslFile = versionResolver.getGenericodeXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
+			val xslFile = versionResolver.getGenericodeXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
 			if (!StringUtils.isEmpty(xslFile))
 			{
-				transformer = XSLTransformer.getInstance(xslFile);
-				String result = transformer.transform(new String(xml));
+				val transformer = Try.of(() -> XSLTransformer.getInstance(xslFile)).getOrElseThrow(e -> new ValidatorException(e));
+				val result = Try.of(() -> transformer.transform(new String(xml))).getOrElseThrow(e -> new ValidationException(transformer.getXslErrors().toString(),e));
 				if (!StringUtils.isEmpty(result))
 					throw new ValidationException(result);
 			}
-		}
-		catch (TransformerException e)
-		{
-			if (transformer == null)
-				throw new ValidatorException(e);
-			else
-				throw new ValidationException(transformer.getXslErrors().toString(),e);
 		}
 		catch (VersionNotFoundException e)
 		{
