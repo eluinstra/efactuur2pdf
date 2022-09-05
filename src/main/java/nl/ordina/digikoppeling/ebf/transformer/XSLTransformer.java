@@ -43,7 +43,7 @@ import net.sf.saxon.type.SchemaType;
 
 public class XSLTransformer
 {
-	private static Map<String,XSLTransformer> transformers = new HashMap<String,XSLTransformer>();
+	private static Map<String,XSLTransformer> transformers = new HashMap<>();
 	private Templates templates;
 	private StringBuffer xslErrors;
 
@@ -133,7 +133,7 @@ public class XSLTransformer
 
 	};
 */
-	public static XSLTransformer getInstance(String xslFile) throws TransformerException
+	public static XSLTransformer getInstance(String xslFile)
 	{
 		if (!transformers.containsKey(xslFile))
 			transformers.put(xslFile,new XSLTransformer(xslFile));
@@ -149,7 +149,7 @@ public class XSLTransformer
 		}
 		catch (TransformerConfigurationException e)
 		{
-			throw new RuntimeException(e);
+			throw new IllegalStateException(e);
 		}
 	}
 
