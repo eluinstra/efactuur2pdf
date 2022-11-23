@@ -15,17 +15,14 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-import javax.xml.transform.TransformerException;
-
-import nl.clockwork.efactuur.VersionHelper;
-import nl.clockwork.efactuur.VersionNotFoundException;
-import nl.ordina.digikoppeling.ebf.model.MessageVersion;
-import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
-
 import org.apache.commons.lang3.StringUtils;
 
 import io.vavr.control.Try;
 import lombok.val;
+import nl.clockwork.efactuur.VersionHelper;
+import nl.clockwork.efactuur.VersionNotFoundException;
+import nl.ordina.digikoppeling.ebf.model.MessageVersion;
+import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 
 public class DynamicInvoiceGenericodeValidator
 {

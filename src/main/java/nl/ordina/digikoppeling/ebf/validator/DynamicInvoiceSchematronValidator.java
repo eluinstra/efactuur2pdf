@@ -15,20 +15,14 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Optional;
 
-import javax.xml.transform.Templates;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang3.StringUtils;
 
-import lombok.NonNull;
 import lombok.val;
-import net.sf.saxon.TransformerFactoryImpl;
 import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
@@ -36,40 +30,43 @@ import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 
 public class DynamicInvoiceSchematronValidator
 {
-	@NonNull
-	Templates errorTemplates;
 	private final VersionHelper versionResolver;
 	private final boolean failOnWarning;
 
-	public DynamicInvoiceSchematronValidator(VersionHelper versionResolver, boolean failOnWarning) throws TransformerConfigurationException
+	public DynamicInvoiceSchematronValidator(VersionHelper versionResolver, boolean failOnWarning)
 	{
-		errorTemplates = getSaxonXslTemplates("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
 		this.versionResolver = versionResolver;
 		this.failOnWarning = failOnWarning;
 	}
 
-	public void validate(byte[] xml, MessageVersion messageType) throws ValidatorException
+	public void validate(byte[] xml, MessageVersion messageVersion) throws ValidatorException
 	{
-		XSLTransformer transformer = null;
-		try
+		val transformer = createTransformer(messageVersion);
+		if (transformer.isPresent())
 		{
-			String xslFile = versionResolver.getSchematronXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
-			if (!StringUtils.isEmpty(xslFile))
+			try
 			{
-				transformer = XSLTransformer.getInstance(xslFile);
-				String result = transformer.transform(new String(xml));
-				result = filterResult(result);
+				val validationResult = transformer.get().transform(new String(xml));
+				val result = filterErrors(validationResult, failOnWarning);
 				if (StringUtils.isNotBlank(result))
-					//if (result.contains("failed-assert"))
-						throw new ValidationException(result);
+					throw new ValidationException(result);
+			}
+			catch (TransformerException e)
+			{
+				throw new ValidationException(transformer.get().getXslErrors().toString(),e);
 			}
 		}
-		catch (TransformerException e)
+	}
+
+	private Optional<XSLTransformer> createTransformer(MessageVersion messageVersion) throws ValidatorException
+	{
+		try
 		{
-			if (transformer == null)
-				throw new ValidatorException(e);
+			val xslFile = versionResolver.getSchematronXslPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion());
+			if (!StringUtils.isEmpty(xslFile))
+				return Optional.of(XSLTransformer.getInstance(xslFile));
 			else
-				throw new ValidationException(transformer.getXslErrors().toString(),e);
+				return Optional.empty();
 		}
 		catch (VersionNotFoundException e)
 		{
@@ -77,20 +74,9 @@ public class DynamicInvoiceSchematronValidator
 		}
 	}
 
-	private String filterResult(String xml) throws TransformerException
+	private String filterErrors(String xml, boolean failOnWarning) throws TransformerException
 	{
-		val transformer = errorTemplates.newTransformer();
-		transformer.setParameter("failOnWarning", failOnWarning ? "true" : "false");
-		StreamSource xmlsource = new StreamSource(new StringReader(xml));
-		StringWriter writer = new StringWriter();
-		StreamResult output = new StreamResult(writer);
-		transformer.transform(xmlsource,output);
-		writer.flush();
-		return writer.toString();
-	}
-
-	private Templates getSaxonXslTemplates(String xslFile) throws TransformerConfigurationException
-	{
-		return new TransformerFactoryImpl().newTemplates(new StreamSource(getClass().getResourceAsStream(xslFile),getClass().getResource(xslFile).toString()));
+		val transformer = XSLTransformer.getInstance("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
+		return transformer.transform(xml,new SimpleEntry<String, Object>("failOnWarning", failOnWarning ? "true" : "false"));
 	}
 }

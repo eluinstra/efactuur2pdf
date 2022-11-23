@@ -15,17 +15,19 @@
  */
 package nl.ordina.digikoppeling.ebf.transformer;
 
-import nl.ordina.digikoppeling.ebf.AFSErrorCode;
-import nl.ordina.digikoppeling.ebf.model.EBFError;
-import nl.ordina.digikoppeling.ebf.validator.ValidationException;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import lombok.val;
+import nl.ordina.digikoppeling.ebf.AFSErrorCode;
+import nl.ordina.digikoppeling.ebf.model.EBFError;
+import nl.ordina.digikoppeling.ebf.validator.ValidationException;
+
 public class EBFErrorTransformer
 {
-
 	public EBFError transform(Exception e)
 	{
 		return exceptionToFoutType(e);
@@ -33,19 +35,16 @@ public class EBFErrorTransformer
 
 	private EBFError exceptionToFoutType(Throwable throwable)
 	{
-		EBFError error = new EBFError();
-		AFSErrorCode afleverError = knownValidationException(throwable) ? AFSErrorCode.AFS100 : AFSErrorCode.AFS400;
-		error.setFoutcode(afleverError.foutCode());
-		error.setFoutbeschrijving(afleverError.foutBeschrijving() + "\nFoutmelding:\n" + throwable);
-		return error;
+		val afleverError = knownValidationException(throwable) ? AFSErrorCode.AFS100 : AFSErrorCode.AFS400;
+		val foutcode = afleverError.foutCode();
+		val foutbeschrijving = afleverError.foutBeschrijving() + "\nFoutmelding:\n" + throwable.getMessage();
+		return new EBFError(foutcode,foutbeschrijving);
 	}
 
 	private boolean knownValidationException(Throwable throwable)
 	{
-		for (Throwable t : ExceptionUtils.getThrowables(throwable))
-		 if (t instanceof ValidationException || t instanceof SAXParseException || t instanceof SAXException)
-			 return true;
-		return false;
+		return Arrays.stream(ExceptionUtils.getThrowables(throwable))
+			.anyMatch(t -> t instanceof ValidationException || t instanceof SAXParseException || t instanceof SAXException);
 	}
 
 }

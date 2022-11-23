@@ -19,7 +19,6 @@ import java.io.Serializable;
 
 public class MessageVersion implements Serializable
 {
-	private final static long serialVersionUID = 1L;
 	private nl.clockwork.efactuur.Constants.MessageType type;
 	private nl.clockwork.efactuur.Constants.MessageFormat format;
 	private String version;

@@ -87,7 +87,7 @@ public class TransformFileToPDF implements SystemInterface
 		println("PDF file " + filename + ".pdf created");
 	}
 
-	private byte[] createPDF(final byte[] content, final MessageVersion messageVersion) throws TransformerConfigurationException, ValidationException, IOException, TransformerException, VersionNotFoundException, SAXException, URISyntaxException
+	private byte[] createPDF(final byte[] content, final MessageVersion messageVersion) throws ValidationException, IOException, TransformerException, VersionNotFoundException, SAXException, URISyntaxException
 	{
 		val messageTransformer = new TransformFileToPDF();
 		val canonical = messageTransformer.transformToCanonical(content,messageVersion);
@@ -128,7 +128,7 @@ public class TransformFileToPDF implements SystemInterface
 		return result.toByteArray();
 	}
 
-	private byte[] handleTransformerException(Transformer errorTransformer, FopFactory fopFactory, StringLogger logger) throws FOPException, TransformerConfigurationException, TransformerException, IOException
+	private byte[] handleTransformerException(Transformer errorTransformer, FopFactory fopFactory, StringLogger logger) throws FOPException, TransformerException, IOException
 	{
 		val result = new ByteArrayOutputStream();
 		try (OutputStream errorOut = new BufferedOutputStream(result))

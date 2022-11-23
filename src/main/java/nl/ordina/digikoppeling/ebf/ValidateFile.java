@@ -16,7 +16,6 @@
 package nl.ordina.digikoppeling.ebf;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.xml.transform.TransformerConfigurationException;
@@ -40,9 +39,9 @@ import nl.ordina.digikoppeling.ebf.validator.ValidatorException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ValidateFile implements SystemInterface
 {
-	boolean failOnWarning = false;
+	boolean failOnWarning = true;
 
-	public static void main(String[] args) throws FileNotFoundException, ValidatorException, IOException, TransformerConfigurationException
+	public static void main(String[] args) throws ValidatorException, IOException, TransformerConfigurationException
 	{
 		if (args.length != 1)
 		{
@@ -52,7 +51,7 @@ public class ValidateFile implements SystemInterface
 		new ValidateFile().validate(args[0]);
 	}
 
-	public void validate(String filename) throws ValidatorException, IOException, FileNotFoundException, TransformerConfigurationException
+	public void validate(String filename) throws ValidatorException, IOException, TransformerConfigurationException
 	{
 		try
 		{

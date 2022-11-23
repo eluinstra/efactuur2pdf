@@ -18,9 +18,11 @@ package nl.ordina.digikoppeling.ebf.processor;
 import java.io.ByteArrayInputStream;
 
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import lombok.val;
 import nl.clockwork.efactuur.Constants;
 import nl.clockwork.efactuur.Constants.MessageFormat;
 import nl.clockwork.efactuur.Constants.MessageType;
@@ -30,18 +32,18 @@ public class MessageParser
 {
 	public MessageVersion getMessageVersion(byte[] message) throws ParseException
 	{
-		XMLInputFactory factory = XMLInputFactory.newInstance();
+		val factory = XMLInputFactory.newInstance();
 
 		try
 		{
-			XMLStreamReader reader = factory.createXMLStreamReader(new ByteArrayInputStream(message));
+			val reader = factory.createXMLStreamReader(new ByteArrayInputStream(message));
 			readStartElement(reader);
 
-			MessageFormat messageFormat = getMessageFormat(reader.getNamespaceURI());
+			val messageFormat = getMessageFormat(reader.getNamespaceURI());
 			if (messageFormat == null)
 				throw new ParseException("Could not determine EBF message format");
 
-			MessageType messageType = getMessageType(reader.getLocalName());
+			val messageType = getMessageType(reader.getLocalName());
 			if (messageType == null)
 				throw new ParseException("Could not determine EBF message type");
 
@@ -79,7 +81,7 @@ public class MessageParser
 
 	private MessageType getMessageType(String rootElementName)
 	{
-		MessageType messageType = Constants.rootTagToMessageType.get(rootElementName);
+		val messageType = Constants.rootTagToMessageType.get(rootElementName);
 		if (messageType != null)
 			return messageType;
 		else
@@ -149,7 +151,7 @@ public class MessageParser
 		while (reader.hasNext())
 		{
 			reader.next();
-			if (reader.getEventType() == XMLStreamReader.START_ELEMENT)
+			if (reader.getEventType() == XMLStreamConstants.START_ELEMENT)
 				return;
 		}
 	}

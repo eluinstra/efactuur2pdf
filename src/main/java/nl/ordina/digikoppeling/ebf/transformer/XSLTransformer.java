@@ -20,10 +20,10 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
@@ -31,6 +31,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 
+import lombok.val;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
@@ -45,7 +46,7 @@ public class XSLTransformer
 {
 	private static Map<String,XSLTransformer> transformers = new HashMap<>();
 	private Templates templates;
-	private StringBuffer xslErrors;
+	private StringBuilder xslErrors;
 
 	private Receiver receiver = new Receiver()
 	{
@@ -135,14 +136,13 @@ public class XSLTransformer
 */
 	public static XSLTransformer getInstance(String xslFile)
 	{
-		if (!transformers.containsKey(xslFile))
-			transformers.put(xslFile,new XSLTransformer(xslFile));
+		transformers.computeIfAbsent(xslFile,XSLTransformer::new);
 		return transformers.get(xslFile);
 	}
 
 	private XSLTransformer(String xslFile)
 	{
-		xslErrors = new StringBuffer();
+		xslErrors = new StringBuilder();
 		try
 		{
 			templates = new TransformerFactoryImpl().newTemplates(new StreamSource(this.getClass().getResourceAsStream(xslFile),this.getClass().getResource(xslFile).toString()));
@@ -153,31 +153,33 @@ public class XSLTransformer
 		}
 	}
 
-	public String transform(String xml) throws TransformerException
+	public String transform(String xml, Entry<String, Object>...parameters) throws TransformerException
 	{
-		xslErrors = new StringBuffer();
-		Transformer transformer = templates.newTransformer();
+		xslErrors = new StringBuilder();
+		val transformer = templates.newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		//transformer.setErrorListener(this.errors);
 		//((net.sf.saxon.jaxp.TransformerImpl)transformer).getUnderlyingController().setMessageEmitter(new MessageWarner());
 		((net.sf.saxon.jaxp.TransformerImpl)transformer).getUnderlyingController().setMessageEmitter(this.receiver);
-		StreamSource xmlsource = new StreamSource(new StringReader(xml));
-		StringWriter writer = new StringWriter();
-		StreamResult output = new StreamResult(writer);
+		for (val p: parameters)
+			transformer.setParameter(p.getKey(), p.getValue());
+		val xmlsource = new StreamSource(new StringReader(xml));
+		val writer = new StringWriter();
+		val output = new StreamResult(writer);
 		transformer.transform(xmlsource,output);
 		writer.flush();
 		return writer.toString();
 	}
 
-	public StringBuffer getXslErrors()
+	public StringBuilder getXslErrors()
 	{
 		return xslErrors;
 	}
 	
 	public static void main(String[] args) throws TransformerException, IOException
 	{
-		XSLTransformer transformer = getInstance("/template.xsl");
+		val transformer = getInstance("/template.xsl");
 		System.out.println(transformer.transform(IOUtils.toString(XSLTransformer.class.getResourceAsStream("/input.xml"))));
 	}
 }

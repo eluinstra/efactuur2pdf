@@ -20,15 +20,15 @@ import java.io.StringReader;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
-import nl.clockwork.efactuur.VersionHelper;
-import nl.clockwork.efactuur.VersionNotFoundException;
-import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
+
+import lombok.val;
+import nl.clockwork.efactuur.VersionHelper;
+import nl.clockwork.efactuur.VersionNotFoundException;
+import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 
 public class DynamicInvoiceXSDValidator
 {
@@ -38,12 +38,12 @@ public class DynamicInvoiceXSDValidator
 	{
 		try
 		{
-			String xsdFile = versionResolver.getXsdPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
+			val xsdFile = versionResolver.getXsdPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
 			if (!StringUtils.isEmpty(xsdFile))
 			{
-				StreamSource xmlStream = new StreamSource(new StringReader(new String(content)));
-				SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-				Schema schema = factory.newSchema(new StreamSource(this.getClass().getResourceAsStream(xsdFile),this.getClass().getResource(xsdFile).toString()));
+				val xmlStream = new StreamSource(new StringReader(new String(content)));
+				val factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				val schema = factory.newSchema(new StreamSource(this.getClass().getResourceAsStream(xsdFile),this.getClass().getResource(xsdFile).toString()));
 				schema.newValidator().validate(xmlStream);
 			}
 		}
@@ -51,11 +51,7 @@ public class DynamicInvoiceXSDValidator
 		{
 			throw new ValidationException(e);
 		}
-		catch (IOException e)
-		{
-			throw new ValidatorException(e);
-		}
-		catch (VersionNotFoundException e)
+		catch (VersionNotFoundException | IOException e)
 		{
 			throw new ValidatorException(e);
 		}
