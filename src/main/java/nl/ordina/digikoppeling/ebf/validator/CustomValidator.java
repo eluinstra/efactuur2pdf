@@ -15,14 +15,32 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-import javax.xml.transform.TransformerException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
-import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
+import javax.xml.transform.Templates;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.NonNull;
+import lombok.val;
+import net.sf.saxon.TransformerFactoryImpl;
+import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
+
 public class CustomValidator
 {
+	@NonNull
+	Templates errorTemplates;
+
+	
+	public CustomValidator() throws TransformerConfigurationException {
+		errorTemplates = getSaxonXslTemplates("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
+	}
+
 	public void validate(byte[] xml) throws ValidatorException
 	{
 		XSLTransformer transformer = null;
@@ -49,22 +67,20 @@ public class CustomValidator
 		}
 	}
 
-	private String filterResult(String result)
+	private String filterResult(String xml) throws TransformerException
 	{
-		//FIXME: improve???
-		boolean tagActive = false;
-		StringBuffer filteredResult = new StringBuffer();
-		for (final String temp: result.split("\n"))
-		{
-			if (temp.contains("<svrl:failed-assert"))
-				tagActive = true;
-			if (tagActive == true)
-				//if (result.contains("flag=\"fatal\""))
-					filteredResult.append(temp);
-			if (temp.contains("</svrl:failed-assert"))
-				tagActive = false;
-		}
-		return filteredResult.toString();
+		val transformer = errorTemplates.newTransformer();
+		transformer.setParameter("failOnWarning", "true");
+		StreamSource xmlsource = new StreamSource(new StringReader(xml));
+		StringWriter writer = new StringWriter();
+		StreamResult output = new StreamResult(writer);
+		transformer.transform(xmlsource,output);
+		writer.flush();
+		return writer.toString();
 	}
 
+	private Templates getSaxonXslTemplates(String xslFile) throws TransformerConfigurationException
+	{
+		return new TransformerFactoryImpl().newTemplates(new StreamSource(getClass().getResourceAsStream(xslFile),getClass().getResource(xslFile).toString()));
+	}
 }

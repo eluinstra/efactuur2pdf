@@ -15,10 +15,20 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import javax.xml.transform.Templates;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.NonNull;
+import lombok.val;
+import net.sf.saxon.TransformerFactoryImpl;
 import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
@@ -26,11 +36,14 @@ import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 
 public class DynamicInvoiceSchematronValidator
 {
+	@NonNull
+	Templates errorTemplates;
 	private final VersionHelper versionResolver;
 	private final boolean failOnWarning;
 
-	public DynamicInvoiceSchematronValidator(VersionHelper versionResolver, boolean failOnWarning)
+	public DynamicInvoiceSchematronValidator(VersionHelper versionResolver, boolean failOnWarning) throws TransformerConfigurationException
 	{
+		errorTemplates = getSaxonXslTemplates("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
 		this.versionResolver = versionResolver;
 		this.failOnWarning = failOnWarning;
 	}
@@ -64,20 +77,20 @@ public class DynamicInvoiceSchematronValidator
 		}
 	}
 
-	private String filterResult(String xml)
+	private String filterResult(String xml) throws TransformerException
 	{
-		//FIXME: improve???
-		boolean tagActive = false;
-		StringBuffer result = new StringBuffer();
-		for (final String temp: xml.split("\n"))
-		{
-			if (temp.contains("<svrl:failed-assert") && (failOnWarning || xml.contains("flag=\"fatal\"")))
-				tagActive = true;
-			if (tagActive == true)
-					result.append(temp);
-			if (temp.contains("</svrl:failed-assert"))
-				tagActive = false;
-		}
-		return result.toString();
+		val transformer = errorTemplates.newTransformer();
+		transformer.setParameter("failOnWarning", failOnWarning ? "true" : "false");
+		StreamSource xmlsource = new StreamSource(new StringReader(xml));
+		StringWriter writer = new StringWriter();
+		StreamResult output = new StreamResult(writer);
+		transformer.transform(xmlsource,output);
+		writer.flush();
+		return writer.toString();
+	}
+
+	private Templates getSaxonXslTemplates(String xslFile) throws TransformerConfigurationException
+	{
+		return new TransformerFactoryImpl().newTemplates(new StreamSource(getClass().getResourceAsStream(xslFile),getClass().getResource(xslFile).toString()));
 	}
 }

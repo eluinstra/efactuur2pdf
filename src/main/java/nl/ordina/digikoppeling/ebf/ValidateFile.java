@@ -19,6 +19,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.xml.transform.TransformerConfigurationException;
+
 import org.apache.commons.io.IOUtils;
 
 import lombok.AccessLevel;
@@ -40,7 +42,7 @@ public class ValidateFile implements SystemInterface
 {
 	boolean failOnWarning = false;
 
-	public static void main(String[] args) throws FileNotFoundException, ValidatorException, IOException
+	public static void main(String[] args) throws FileNotFoundException, ValidatorException, IOException, TransformerConfigurationException
 	{
 		if (args.length != 1)
 		{
@@ -50,7 +52,7 @@ public class ValidateFile implements SystemInterface
 		new ValidateFile().validate(args[0]);
 	}
 
-	public void validate(String filename) throws ValidatorException, IOException, FileNotFoundException
+	public void validate(String filename) throws ValidatorException, IOException, FileNotFoundException, TransformerConfigurationException
 	{
 		try
 		{
@@ -59,11 +61,11 @@ public class ValidateFile implements SystemInterface
 		}
 		catch (ValidationException e)
 		{
-			println("Message invalid: " + e.getMessage());
+			println("Message invalid:\n" + e.getMessage());
 		}
 	}
 
-	private void validate(byte[] content) throws ValidatorException
+	private void validate(byte[] content) throws ValidatorException, TransformerConfigurationException
 	{
 		try
 		{
