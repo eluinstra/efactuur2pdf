@@ -18,12 +18,15 @@ package nl.ordina.digikoppeling.ebf.transformer;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.transform.ErrorListener;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
@@ -31,118 +34,30 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 
+import lombok.AccessLevel;
 import lombok.val;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import net.sf.saxon.TransformerFactoryImpl;
-import net.sf.saxon.event.PipelineConfiguration;
-import net.sf.saxon.event.Receiver;
-import net.sf.saxon.om.AttributeMap;
-import net.sf.saxon.om.NamespaceMap;
-import net.sf.saxon.om.NodeName;
-import net.sf.saxon.s9api.Location;
-import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.type.SchemaType;
+import net.sf.saxon.lib.Logger;
+import net.sf.saxon.lib.StandardErrorListener;
+import nl.ordina.digikoppeling.ebf.validator.StringLogger;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class XSLTransformer
 {
 	private static Map<String,XSLTransformer> transformers = new HashMap<>();
-	private Templates templates;
-	private StringBuilder xslErrors;
+	Templates templates;
+	@NonFinal
+	StringLogger logger;
 
-	private Receiver receiver = new Receiver()
-	{
-		@Override
-		public String getSystemId()
-		{
-			return null;
-		}
-		@Override
-		public void characters(CharSequence chars, Location location, int properties) throws XPathException
-		{
-			xslErrors.append(chars);
-		}
-		@Override
-		public void close() throws XPathException
-		{
-		}
-		@Override
-		public void comment(CharSequence content, Location location, int properties) throws XPathException
-		{
-		}
-		@Override
-		public void endDocument() throws XPathException
-		{
-		}
-		@Override
-		public void endElement() throws XPathException
-		{
-		}
-		@Override
-		public PipelineConfiguration getPipelineConfiguration()
-		{
-			return null;
-		}
-		@Override
-		public void open() throws XPathException
-		{
-		}
-		@Override
-		public void processingInstruction(String name, CharSequence data, Location location, int properties) throws XPathException
-		{
-		}
-		@Override
-		public void setPipelineConfiguration(PipelineConfiguration arg0)
-		{
-		}
-		@Override
-		public void setSystemId(String arg0)
-		{
-		}
-		@Override
-		public void setUnparsedEntity(String arg0, String arg1, String arg2) throws XPathException
-		{
-		}
-		public void startDocument(int arg0) throws XPathException
-		{
-		}
-		@Override
-		public void startElement(NodeName elemName, SchemaType type, AttributeMap attributes, NamespaceMap namespaces, Location location, int properties) throws XPathException
-		{
-		}
-		@Override
-		public boolean usesTypeAnnotations()
-		{
-			return false;
-		}
-	};
-
-/*	private ErrorListener errors = new ErrorListener()
-	{
-		public void warning(TransformerException exception) throws TransformerException
-		{
-			xslErrors.append(exception.getLocalizedMessage());
-		}
-
-		public void error(TransformerException exception) throws TransformerException
-		{
-			xslErrors.append(exception.getLocalizedMessage());
-		}
-
-		public void fatalError(TransformerException exception) throws TransformerException
-		{
-			xslErrors.append(exception.getLocalizedMessage());
-		}
-
-	};
-*/
 	public static XSLTransformer getInstance(String xslFile)
 	{
-		transformers.computeIfAbsent(xslFile,XSLTransformer::new);
-		return transformers.get(xslFile);
+		return transformers.computeIfAbsent(xslFile,XSLTransformer::new);
 	}
 
 	private XSLTransformer(String xslFile)
 	{
-		xslErrors = new StringBuilder();
 		try
 		{
 			templates = new TransformerFactoryImpl().newTemplates(new StreamSource(this.getClass().getResourceAsStream(xslFile),this.getClass().getResource(xslFile).toString()));
@@ -155,31 +70,45 @@ public class XSLTransformer
 
 	public String transform(String xml, Entry<String, Object>...parameters) throws TransformerException
 	{
-		xslErrors = new StringBuilder();
-		val transformer = templates.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		//transformer.setErrorListener(this.errors);
-		//((net.sf.saxon.jaxp.TransformerImpl)transformer).getUnderlyingController().setMessageEmitter(new MessageWarner());
-		((net.sf.saxon.jaxp.TransformerImpl)transformer).getUnderlyingController().setMessageEmitter(this.receiver);
+		val transformer = createTransformer();
+		logger = new StringLogger();
+		transformer.setErrorListener(createErrorListener(logger));
 		for (val p: parameters)
 			transformer.setParameter(p.getKey(), p.getValue());
 		val xmlsource = new StreamSource(new StringReader(xml));
+		return transform(transformer, xmlsource);
+	}
+
+	private Transformer createTransformer() throws TransformerConfigurationException {
+		val transformer = templates.newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		return transformer;
+	}
+
+	private ErrorListener createErrorListener(Logger logger)
+	{
+		val listener = new StandardErrorListener();
+		listener.setLogger(logger);
+		return listener;
+	}
+
+	private String transform(Transformer transformer, StreamSource xmlsource) throws TransformerException
+	{
 		val writer = new StringWriter();
-		val output = new StreamResult(writer);
-		transformer.transform(xmlsource,output);
+		transformer.transform(xmlsource, new StreamResult(writer));
 		writer.flush();
 		return writer.toString();
 	}
 
-	public StringBuilder getXslErrors()
+	public String getXslErrors()
 	{
-		return xslErrors;
+		return logger.getLog();
 	}
 	
 	public static void main(String[] args) throws TransformerException, IOException
 	{
 		val transformer = getInstance("/template.xsl");
-		System.out.println(transformer.transform(IOUtils.toString(XSLTransformer.class.getResourceAsStream("/input.xml"))));
+		System.out.println(transformer.transform(IOUtils.toString(XSLTransformer.class.getResourceAsStream("/input.xml"), StandardCharsets.UTF_8)));
 	}
 }

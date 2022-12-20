@@ -38,7 +38,7 @@ public class CustomValidator
 		}
 		catch (TransformerException e)
 		{
-			throw new ValidationException(transformer.getXslErrors().toString(),e);
+			throw new ValidationException(transformer.getXslErrors(),e);
 		}
 	}
 

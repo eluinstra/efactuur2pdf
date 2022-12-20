@@ -53,7 +53,7 @@ public class DynamicInvoiceSchematronValidator
 			}
 			catch (TransformerException e)
 			{
-				throw new ValidationException(transformer.get().getXslErrors().toString(),e);
+				throw new ValidationException(transformer.get().getXslErrors(),e);
 			}
 		}
 	}

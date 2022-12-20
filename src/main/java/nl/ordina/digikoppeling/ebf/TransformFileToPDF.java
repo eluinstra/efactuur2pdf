@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -46,11 +47,13 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
 import nl.clockwork.efactuur.DigikoppelingVersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.processor.MessageParser;
+import nl.ordina.digikoppeling.ebf.processor.ParseException;
 import nl.ordina.digikoppeling.ebf.validator.StringLogger;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 
@@ -75,7 +78,7 @@ public class TransformFileToPDF implements SystemInterface
 		new TransformFileToPDF().transform(args[0]);
 	}
 
-	public void transform(String filename) throws Exception
+	public void transform(String filename) throws IOException, ParseException, ValidationException, TransformerException, VersionNotFoundException, SAXException, URISyntaxException
 	{
 		val content = IOUtils.toByteArray(new FileInputStream(filename));
 		val messageVersion = new MessageParser().getMessageVersion(content);
@@ -113,6 +116,8 @@ public class TransformFileToPDF implements SystemInterface
 			val fop = fopFactory.newFop(MimeConstants.MIME_PDF,out);
 			val templates = getSaxonXslTemplates(new DigikoppelingVersionHelper().getCanonicalToPDFPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
 			val transformer = createTransformer(templates,messageId,messageVersion,berichtSoort);
+			val logger = new StringLogger();
+			transformer.setErrorListener(createErrorListener(logger));
 			val r = new SAXResult(fop.getDefaultHandler());
 			try
 			{
@@ -120,7 +125,6 @@ public class TransformFileToPDF implements SystemInterface
 			}
 			catch (javax.xml.transform.TransformerException e)
 			{
-				val logger = addStringLogger(transformer);
 				println("The following transformation errors occurred:\n" + logger.getLog());
 				return handleTransformerException(createTransformer(errorTemplates,messageId,messageVersion,berichtSoort),fopFactory,logger);
 			}
@@ -141,13 +145,11 @@ public class TransformFileToPDF implements SystemInterface
 		return result.toByteArray();
 	}
 
-	private StringLogger addStringLogger(Transformer transformer)
+	private ErrorListener createErrorListener(Logger logger)
 	{
 		val listener = new StandardErrorListener();
-		val logger = new StringLogger();
 		listener.setLogger(logger);
-		transformer.setErrorListener(listener);
-		return logger;
+		return listener;
 	}
 
 	private Transformer createTransformer(Templates templates, String messageId, MessageVersion messageVersion, String berichtSoort) throws TransformerConfigurationException
