@@ -15,18 +15,16 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
+
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Optional;
-
 import javax.xml.transform.TransformerException;
-
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.val;
 import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
+import org.apache.commons.lang3.StringUtils;
 
 public class DynamicInvoiceSchematronValidator
 {
@@ -47,7 +45,7 @@ public class DynamicInvoiceSchematronValidator
 			try
 			{
 				val validationResult = transformer.get().transform(new String(xml));
-				val result = filterErrors(validationResult, failOnWarning);
+				val result = filterErrors(validationResult,failOnWarning);
 				if (StringUtils.isNotBlank(result))
 					throw new ValidationException(result);
 			}
@@ -77,6 +75,6 @@ public class DynamicInvoiceSchematronValidator
 	private String filterErrors(String xml, boolean failOnWarning) throws TransformerException
 	{
 		val transformer = XSLTransformer.getInstance("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
-		return transformer.transform(xml,new SimpleEntry<String, Object>("failOnWarning", failOnWarning ? "true" : "false"));
+		return transformer.transform(xml,new SimpleEntry<String,Object>("failOnWarning",failOnWarning ? "true" : "false"));
 	}
 }

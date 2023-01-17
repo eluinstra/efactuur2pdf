@@ -15,20 +15,18 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
+
 import java.io.IOException;
 import java.io.StringReader;
-
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
-
-import org.apache.commons.lang3.StringUtils;
-import org.xml.sax.SAXException;
-
 import lombok.val;
 import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
+import org.apache.commons.lang3.StringUtils;
+import org.xml.sax.SAXException;
 
 public class DynamicInvoiceXSDValidator
 {

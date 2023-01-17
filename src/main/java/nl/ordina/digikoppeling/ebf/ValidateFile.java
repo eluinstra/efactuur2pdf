@@ -15,16 +15,13 @@
  */
 package nl.ordina.digikoppeling.ebf;
 
+
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import javax.xml.transform.TransformerConfigurationException;
-
-import org.apache.commons.io.IOUtils;
-
 import lombok.AccessLevel;
-import lombok.val;
 import lombok.experimental.FieldDefaults;
+import lombok.val;
 import nl.clockwork.efactuur.Constants;
 import nl.clockwork.efactuur.DigikoppelingVersionHelper;
 import nl.ordina.digikoppeling.ebf.processor.MessageParser;
@@ -35,6 +32,7 @@ import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceSchematronValidator;
 import nl.ordina.digikoppeling.ebf.validator.DynamicInvoiceXSDValidator;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 import nl.ordina.digikoppeling.ebf.validator.ValidatorException;
+import org.apache.commons.io.IOUtils;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ValidateFile implements SystemInterface

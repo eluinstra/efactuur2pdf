@@ -15,6 +15,7 @@
  */
 package nl.ordina.digikoppeling.ebf.transformer;
 
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -22,7 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Templates;
@@ -31,17 +31,15 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import org.apache.commons.io.IOUtils;
-
 import lombok.AccessLevel;
-import lombok.val;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.val;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
 import nl.ordina.digikoppeling.ebf.validator.StringLogger;
+import org.apache.commons.io.IOUtils;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class XSLTransformer
@@ -60,7 +58,8 @@ public class XSLTransformer
 	{
 		try
 		{
-			templates = new TransformerFactoryImpl().newTemplates(new StreamSource(this.getClass().getResourceAsStream(xslFile),this.getClass().getResource(xslFile).toString()));
+			templates = new TransformerFactoryImpl()
+					.newTemplates(new StreamSource(this.getClass().getResourceAsStream(xslFile),this.getClass().getResource(xslFile).toString()));
 		}
 		catch (TransformerConfigurationException e)
 		{
@@ -68,21 +67,22 @@ public class XSLTransformer
 		}
 	}
 
-	public String transform(String xml, Entry<String, Object>...parameters) throws TransformerException
+	public String transform(String xml, Entry<String,Object>...parameters) throws TransformerException
 	{
 		val transformer = createTransformer();
 		logger = new StringLogger();
 		transformer.setErrorListener(createErrorListener(logger));
-		for (val p: parameters)
-			transformer.setParameter(p.getKey(), p.getValue());
+		for (val p : parameters)
+			transformer.setParameter(p.getKey(),p.getValue());
 		val xmlsource = new StreamSource(new StringReader(xml));
-		return transform(transformer, xmlsource);
+		return transform(transformer,xmlsource);
 	}
 
-	private Transformer createTransformer() throws TransformerConfigurationException {
+	private Transformer createTransformer() throws TransformerConfigurationException
+	{
 		val transformer = templates.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2");
 		return transformer;
 	}
 
@@ -96,7 +96,7 @@ public class XSLTransformer
 	private String transform(Transformer transformer, StreamSource xmlsource) throws TransformerException
 	{
 		val writer = new StringWriter();
-		transformer.transform(xmlsource, new StreamResult(writer));
+		transformer.transform(xmlsource,new StreamResult(writer));
 		writer.flush();
 		return writer.toString();
 	}
@@ -105,10 +105,10 @@ public class XSLTransformer
 	{
 		return logger.getLog();
 	}
-	
+
 	public static void main(String[] args) throws TransformerException, IOException
 	{
 		val transformer = getInstance("/template.xsl");
-		System.out.println(transformer.transform(IOUtils.toString(XSLTransformer.class.getResourceAsStream("/input.xml"), StandardCharsets.UTF_8)));
+		System.out.println(transformer.transform(IOUtils.toString(XSLTransformer.class.getResourceAsStream("/input.xml"),StandardCharsets.UTF_8)));
 	}
 }

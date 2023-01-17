@@ -15,6 +15,7 @@
  */
 package nl.ordina.digikoppeling.ebf.model;
 
+
 import java.io.Serializable;
 
 public class MessageVersion implements Serializable

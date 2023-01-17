@@ -15,16 +15,15 @@
  */
 package nl.ordina.digikoppeling.ebf.transformer;
 
+
 import java.util.Arrays;
-
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
 import lombok.val;
 import nl.ordina.digikoppeling.ebf.AFSErrorCode;
 import nl.ordina.digikoppeling.ebf.model.EBFError;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class EBFErrorTransformer
 {
@@ -44,7 +43,7 @@ public class EBFErrorTransformer
 	private boolean knownValidationException(Throwable throwable)
 	{
 		return Arrays.stream(ExceptionUtils.getThrowables(throwable))
-			.anyMatch(t -> t instanceof ValidationException || t instanceof SAXParseException || t instanceof SAXException);
+				.anyMatch(t -> t instanceof ValidationException || t instanceof SAXParseException || t instanceof SAXException);
 	}
 
 }

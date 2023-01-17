@@ -15,10 +15,10 @@
  */
 package nl.ordina.digikoppeling.ebf;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import lombok.val;
 
 public class ValidateDir implements SystemInterface
@@ -37,21 +37,18 @@ public class ValidateDir implements SystemInterface
 	{
 		try (val files = Files.list(Paths.get(path)))
 		{
-			files.filter(f-> f.getFileName().toString().endsWith(".xml"))
-				.sorted()
-				.map(Object::toString)
-				.forEach(filename ->
+			files.filter(f -> f.getFileName().toString().endsWith(".xml")).sorted().map(Object::toString).forEach(filename ->
+			{
+				println(filename);
+				try
 				{
-					println(filename);
-					try
-					{
-						new ValidateFile().validate(filename);
-					}
-					catch (Exception e)
-					{
-						println("An unexpected error occurred: " + e.getMessage());
-					}
-				});
+					new ValidateFile().validate(filename);
+				}
+				catch (Exception e)
+				{
+					println("An unexpected error occurred: " + e.getMessage());
+				}
+			});
 		}
 	}
 }

@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-import org.apache.commons.lang3.StringUtils;
 
 import io.vavr.control.Try;
 import lombok.val;
@@ -23,6 +22,7 @@ import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
+import org.apache.commons.lang3.StringUtils;
 
 public class DynamicInvoiceGenericodeValidator
 {
@@ -36,7 +36,7 @@ public class DynamicInvoiceGenericodeValidator
 			if (!StringUtils.isEmpty(xslFile))
 			{
 				val transformer = Try.of(() -> XSLTransformer.getInstance(xslFile)).getOrElseThrow(e -> new ValidatorException(e));
-				val result = Try.of(() -> transformer.transform(new String(xml))).getOrElseThrow(e -> new ValidationException(transformer.getXslErrors().toString(),e));
+				val result = Try.of(() -> transformer.transform(new String(xml))).getOrElseThrow(e -> new ValidationException(transformer.getXslErrors(),e));
 				if (!StringUtils.isEmpty(result))
 					throw new ValidationException(result);
 			}

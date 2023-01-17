@@ -15,13 +15,12 @@
  */
 package nl.ordina.digikoppeling.ebf.processor;
 
-import java.io.ByteArrayInputStream;
 
+import java.io.ByteArrayInputStream;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-
 import lombok.val;
 import nl.clockwork.efactuur.Constants;
 import nl.clockwork.efactuur.Constants.MessageFormat;
