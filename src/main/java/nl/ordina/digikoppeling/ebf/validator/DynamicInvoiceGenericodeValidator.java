@@ -16,40 +16,37 @@
 package nl.ordina.digikoppeling.ebf.validator;
 
 
-import io.vavr.control.Try;
-import lombok.val;
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
-import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 import org.apache.commons.lang3.StringUtils;
 
-public class DynamicInvoiceGenericodeValidator
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@AllArgsConstructor
+public class DynamicInvoiceGenericodeValidator implements WithValidator
 {
-	private VersionHelper versionResolver;
+	@NonNull
+	VersionHelper versionResolver;
 
 	public void validate(byte[] xml, MessageVersion messageType) throws ValidatorException
 	{
+		getXslFile(messageType).map(transform(xml)).filter(StringUtils::isNotEmpty).ifPresent(this::throwValidationException);
+	}
+
+	private Optional<String> getXslFile(MessageVersion messageType) throws ValidationException
+	{
 		try
 		{
-			val xslFile = versionResolver.getGenericodeXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
-			if (!StringUtils.isEmpty(xslFile))
-			{
-				val transformer = Try.of(() -> XSLTransformer.getInstance(xslFile)).getOrElseThrow(e -> new ValidatorException(e));
-				val result = Try.of(() -> transformer.transform(new String(xml))).getOrElseThrow(e -> new ValidationException(transformer.getXslErrors(),e));
-				if (!StringUtils.isEmpty(result))
-					throw new ValidationException(result);
-			}
+			return versionResolver.getGenericodeXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
 		}
 		catch (VersionNotFoundException e)
 		{
-			throw new ValidatorException(e);
+			throw new ValidationException(e);
 		}
 	}
-
-	public void setVersionResolver(VersionHelper versionResolver)
-	{
-		this.versionResolver = versionResolver;
-	}
-
 }

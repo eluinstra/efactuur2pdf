@@ -102,7 +102,8 @@ public class TransformFileToPDF implements SystemInterface
 	{
 		val result = new ByteArrayOutputStream();
 		val templates = getSaxonXslTemplates(
-				new DigikoppelingVersionHelper().getInvoiceToCanonicalPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
+				new DigikoppelingVersionHelper().getInvoiceToCanonicalPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion())
+						.orElse(null));
 		templates.newTransformer().transform(new StreamSource(new ByteArrayInputStream(content)),new StreamResult(result));
 		result.flush();
 		return result.toByteArray();
@@ -118,7 +119,7 @@ public class TransformFileToPDF implements SystemInterface
 		{
 			val fop = fopFactory.newFop(MimeConstants.MIME_PDF,out);
 			val templates = getSaxonXslTemplates(
-					new DigikoppelingVersionHelper().getCanonicalToPDFPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()));
+					new DigikoppelingVersionHelper().getCanonicalToPDFPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion()).orElse(null));
 			val transformer = createTransformer(templates,messageId,messageVersion,berichtSoort);
 			val logger = new StringLogger();
 			transformer.setErrorListener(createErrorListener(logger));

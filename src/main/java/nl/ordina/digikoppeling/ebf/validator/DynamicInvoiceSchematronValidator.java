@@ -16,65 +16,40 @@
 package nl.ordina.digikoppeling.ebf.validator;
 
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Optional;
-import javax.xml.transform.TransformerException;
-import lombok.val;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import nl.clockwork.efactuur.VersionHelper;
 import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
-import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
-import org.apache.commons.lang3.StringUtils;
 
-public class DynamicInvoiceSchematronValidator
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@AllArgsConstructor
+public class DynamicInvoiceSchematronValidator implements WithValidator
 {
-	private final VersionHelper versionResolver;
-	private final boolean failOnWarning;
-
-	public DynamicInvoiceSchematronValidator(VersionHelper versionResolver, boolean failOnWarning)
-	{
-		this.versionResolver = versionResolver;
-		this.failOnWarning = failOnWarning;
-	}
+	@NonNull
+	VersionHelper versionResolver;
+	boolean failOnWarning;
 
 	public void validate(byte[] xml, MessageVersion messageVersion) throws ValidatorException
 	{
-		val transformer = createTransformer(messageVersion);
-		if (transformer.isPresent())
-		{
-			try
-			{
-				val validationResult = transformer.get().transform(new String(xml));
-				val result = filterErrors(validationResult,failOnWarning);
-				if (StringUtils.isNotBlank(result))
-					throw new ValidationException(result);
-			}
-			catch (TransformerException e)
-			{
-				throw new ValidationException(transformer.get().getXslErrors(),e);
-			}
-		}
+		getXslFile(messageVersion).map(transform(xml))
+				.map(filterErrors(failOnWarning))
+				.filter(result -> result.contains("failed-assert"))
+				.ifPresent(this::throwValidationException);
 	}
 
-	private Optional<XSLTransformer> createTransformer(MessageVersion messageVersion) throws ValidatorException
+	private Optional<String> getXslFile(MessageVersion messageType) throws ValidationException
 	{
 		try
 		{
-			val xslFile = versionResolver.getSchematronXslPath(messageVersion.getType(),messageVersion.getFormat(),messageVersion.getVersion());
-			if (!StringUtils.isEmpty(xslFile))
-				return Optional.of(XSLTransformer.getInstance(xslFile));
-			else
-				return Optional.empty();
+			return versionResolver.getSchematronXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
 		}
 		catch (VersionNotFoundException e)
 		{
-			throw new ValidatorException(e);
+			throw new ValidationException(e);
 		}
-	}
-
-	private String filterErrors(String xml, boolean failOnWarning) throws TransformerException
-	{
-		val transformer = XSLTransformer.getInstance("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
-		return transformer.transform(xml,new SimpleEntry<String,Object>("failOnWarning",failOnWarning ? "true" : "false"));
 	}
 }

@@ -16,33 +16,17 @@
 package nl.ordina.digikoppeling.ebf.validator;
 
 
-import java.util.AbstractMap.SimpleEntry;
-import javax.xml.transform.TransformerException;
-import lombok.val;
-import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 
-public class CustomValidator
+public class CustomValidator implements WithValidator
 {
-	public void validate(byte[] xml) throws ValidatorException
+	public void validate(byte[] xml) throws ValidationException
 	{
-		val transformer = XSLTransformer.getInstance("/nl/clockwork/efactuur/nl/domain/ubl/Custom-Validation.xsl");
-		try
-		{
-			val validationResult = transformer.transform(new String(xml));
-			val result = filterResult(validationResult);
-			if (StringUtils.isNotBlank(result))
-				throw new ValidationException(result);
-		}
-		catch (TransformerException e)
-		{
-			throw new ValidationException(transformer.getXslErrors(),e);
-		}
-	}
-
-	private String filterResult(String xml) throws TransformerException
-	{
-		val transformer = XSLTransformer.getInstance("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
-		return transformer.transform(xml,new SimpleEntry<String,Object>("failOnWarning","true"));
+		Optional.of("/nl/clockwork/efactuur/nl/domain/ubl/Custom-Validation.xsl")
+				.map(transform(xml))
+				.map(filterErrors(true))
+				.filter(StringUtils::isNotBlank)
+				.ifPresent(this::throwValidationException);
 	}
 }

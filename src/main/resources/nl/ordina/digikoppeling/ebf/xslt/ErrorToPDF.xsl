@@ -84,7 +84,7 @@
 					<fo:table-row>
 						<fo:table-cell>
 							<fo:block text-align="left">
-								Invoice Formaat : <xsl:value-of select="$message_format"/> <xsl:value-of select="$message_version"/>
+								Invoice Formaat: <xsl:value-of select="$message_format"/> <xsl:value-of select="$message_version"/>
 							</fo:block>							
 						</fo:table-cell>
 						<fo:table-cell>

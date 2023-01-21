@@ -45,5 +45,4 @@ public class EBFErrorTransformer
 		return Arrays.stream(ExceptionUtils.getThrowables(throwable))
 				.anyMatch(t -> t instanceof ValidationException || t instanceof SAXParseException || t instanceof SAXException);
 	}
-
 }
