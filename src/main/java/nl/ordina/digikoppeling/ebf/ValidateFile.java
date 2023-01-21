@@ -62,7 +62,7 @@ public class ValidateFile implements SystemInterface
 		}
 	}
 
-	private void validate(byte[] content) throws ValidatorException, TransformerConfigurationException
+	void validate(byte[] content) throws ValidatorException, TransformerConfigurationException
 	{
 		try
 		{

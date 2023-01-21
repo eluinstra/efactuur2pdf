@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nl-inv:Invoice 
+ xsi:schemaLocation="http://www.nltaxonomie.nl/ubl/2.0/NL/1.0/xsd/maindoc/UBL-NL-Invoice ../xsd/maindoc/UBL-NL-Invoice-1.0.xsd" 
+ xmlns:nl-inv="http://www.nltaxonomie.nl/ubl/2.0/NL/1.0/xsd/maindoc/UBL-NL-Invoice" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" 
+ xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+	<cbc:UBLVersionID>2.0</cbc:UBLVersionID>
+	<cbc:CustomizationID>1.0</cbc:CustomizationID>
+	<cbc:ProfileID>NL</cbc:ProfileID>
+	<cbc:ID>1587968432</cbc:ID>
+	<cbc:CopyIndicator>false</cbc:CopyIndicator>
+	<cbc:IssueDate>2009-08-12</cbc:IssueDate>
+	<cbc:InvoiceTypeCode listAgencyID="88" listAgencyName="Logius Gegevensbeheer NL-Overheid" listID="NL-1001" listName="FactuurSoort" listSchemeURI="http://www.nltaxonomie.nl/ubl/2.0/NL/1.0/cl/gc/NL-InvoiceCode" listURI="http://www.nltaxonomie.nl/ubl/2.0/NL/1.0/cl/gc/NL-InvoiceCode-1.0.gc" listVersionID="0.1">1</cbc:InvoiceTypeCode>
+	<cbc:Note>Niet Betalen DIT IS EEN TEST</cbc:Note>
+	<cbc:AccountingCostCode>45586</cbc:AccountingCostCode>
+	<cac:OrderReference>
+		<cbc:ID>AFN-ORDER-156</cbc:ID>
+		<cbc:SalesOrderID>15616156BB</cbc:SalesOrderID>
+		<cbc:CustomerReference>400</cbc:CustomerReference>
+	</cac:OrderReference>
+	<cac:BillingReference>
+		<cac:InvoiceDocumentReference>
+			<cbc:ID>1587968432</cbc:ID>
+			<cbc:IssueDate>2009-04-09</cbc:IssueDate>
+		</cac:InvoiceDocumentReference>
+	</cac:BillingReference>
+	<cac:ContractDocumentReference>
+		<cbc:ID>12387001</cbc:ID>
+	</cac:ContractDocumentReference>
+	<cac:AccountingSupplierParty>
+		<cbc:CustomerAssignedAccountID>12225BBE</cbc:CustomerAssignedAccountID>
+		<cac:Party>
+			<cac:PartyIdentification>
+				<cbc:ID schemeAgencyID="BE" schemeAgencyName="NBB">22052345 </cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>DIT IS EEN TEST Electronica B.V.</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:Postbox>9000</cbc:Postbox>
+				<cbc:CityName>Eindhalen</cbc:CityName>
+				<cbc:PostalZone>1008KR</cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode listAgencyName="United Nations Economic Commission for Europe" listAgencyID="6" listName="Country" listID="ISO3166-1" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.0" listURI="http://docs.oasis-open.org/ubl/os-UBL-2.0-update/cl/gc/default/CountryIdentificationCode-2.0.gc" listVersionID="0.3">NL</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PhysicalLocation>
+				<cac:Address>
+					<cbc:StreetName>Pelmolenpad</cbc:StreetName>
+					<cbc:BuildingNumber>458-Rood</cbc:BuildingNumber>
+					<cbc:CityName>Eindhalen</cbc:CityName>
+					<cbc:PostalZone>1008KR</cbc:PostalZone>
+					<cac:Country>
+						<cbc:IdentificationCode listAgencyName="United Nations Economic Commission for Europe" listAgencyID="6" listName="Country" listID="ISO3166-1" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.0" listURI="http://docs.oasis-open.org/ubl/os-UBL-2.0-update/cl/gc/default/CountryIdentificationCode-2.0.gc" listVersionID="0.3">NL</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:Address>
+			</cac:PhysicalLocation>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID schemeAgencyName="Belastingdienst">BE1707 723 123 B01</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID/>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:Contact>
+				<cbc:ElectronicMail>voornaam.achternaam@crediteur.nl</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingSupplierParty>
+	<cac:AccountingCustomerParty>
+		<cbc:CustomerAssignedAccountID>15481</cbc:CustomerAssignedAccountID>
+		<cbc:SupplierAssignedAccountID>EEF1G</cbc:SupplierAssignedAccountID>
+		<cac:Party>
+			<cac:PartyIdentification>
+				<cbc:ID schemeAgencyID="NL" schemeAgencyName="256">08115596</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>DIT IS EEN TEST</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:Postbox>10000</cbc:Postbox>
+				<cbc:CityName>Amsterdijk</cbc:CityName>
+				<cbc:PostalZone>1001AA</cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode listAgencyName="United Nations Economic Commission for Europe" listAgencyID="6" listName="Country" listID="ISO3166-1" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.0" listURI="http://docs.oasis-open.org/ubl/os-UBL-2.0-update/cl/gc/default/CountryIdentificationCode-2.0.gc" listVersionID="0.3">NL</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PhysicalLocation>
+				<cac:Address>
+					<cbc:StreetName>Straatnaam</cbc:StreetName>
+					<cbc:BuildingNumber>1111-A</cbc:BuildingNumber>
+					<cbc:CityName>Amsterdijk</cbc:CityName>
+					<cbc:PostalZone>1001AB</cbc:PostalZone>
+					<cac:Country>
+						<cbc:IdentificationCode listAgencyName="United Nations Economic Commission for Europe" listAgencyID="6" listName="Country" listID="ISO3166-1" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.0" listURI="http://docs.oasis-open.org/ubl/os-UBL-2.0-update/cl/gc/default/CountryIdentificationCode-2.0.gc" listVersionID="0.3">NL</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:Address>
+			</cac:PhysicalLocation>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID schemeAgencyName="Belastingdienst">NL001234567B02</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID/>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:Contact>
+				<cbc:ElectronicMail>voornaam.achternaam@debiteur.nl</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingCustomerParty>
+	<cac:Delivery>
+		<cbc:ActualDeliveryDate>2009-10-12</cbc:ActualDeliveryDate>
+	</cac:Delivery>
+	<cac:PaymentMeans>
+		<cbc:PaymentMeansCode>1</cbc:PaymentMeansCode>
+		<cac:PayeeFinancialAccount>
+			<cbc:ID>BE61310126985517</cbc:ID>
+			<cac:FinancialInstitutionBranch>
+				<cac:FinancialInstitution>
+					<cbc:ID>RABONL2UXXX</cbc:ID>
+				</cac:FinancialInstitution>
+			</cac:FinancialInstitutionBranch>
+		</cac:PayeeFinancialAccount>
+	</cac:PaymentMeans>
+	<cac:PaymentTerms>
+		<cbc:Note>Betaling binnen 30 dagen</cbc:Note>
+		<cbc:SettlementDiscountPercent>10.00</cbc:SettlementDiscountPercent>
+		<cac:SettlementPeriod>
+			<cbc:DurationMeasure unitCode="WEE">2</cbc:DurationMeasure>
+			<cbc:Description>Binnen 2 weken</cbc:Description>
+		</cac:SettlementPeriod>
+		<cac:PenaltyPeriod>
+			<cbc:EndDate>2010-04-09</cbc:EndDate>
+		</cac:PenaltyPeriod>
+	</cac:PaymentTerms>
+	<cac:TaxTotal>
+		<cbc:TaxAmount currencyID="EUR">34819.02</cbc:TaxAmount>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">22383.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">4252.77</cbc:TaxAmount>
+			<cbc:Percent>19.00</cbc:Percent>
+			<cac:TaxCategory>
+				<cbc:ID/>
+				<cac:TaxScheme>
+					<cbc:ID/>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+	</cac:TaxTotal>
+	<cac:LegalMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID="EUR">22383.00</cbc:LineExtensionAmount>
+		<cbc:TaxExclusiveAmount currencyID="EUR">30566.25</cbc:TaxExclusiveAmount>
+		<cbc:TaxInclusiveAmount currencyID="EUR">34819.02</cbc:TaxInclusiveAmount>
+		<cbc:PayableAmount currencyID="EUR">0.11</cbc:PayableAmount>
+	</cac:LegalMonetaryTotal>
+	<cac:InvoiceLine>
+		<cbc:ID>001</cbc:ID>
+		<cbc:InvoicedQuantity unitCode="C62">10</cbc:InvoicedQuantity>
+		<cbc:LineExtensionAmount currencyID="EUR">1791.00</cbc:LineExtensionAmount>
+		<cbc:FreeOfChargeIndicator>false</cbc:FreeOfChargeIndicator>
+		<cac:OrderLineReference>
+			<cbc:LineID>01</cbc:LineID>
+			<cac:OrderReference>
+				<cbc:ID>40</cbc:ID>
+			</cac:OrderReference>
+		</cac:OrderLineReference>
+		<cac:AllowanceCharge>
+			<cbc:ID>A-1BC</cbc:ID>
+			<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+			<cbc:MultiplierFactorNumeric>10</cbc:MultiplierFactorNumeric>
+			<cbc:Amount currencyID="EUR">0</cbc:Amount>
+			<cbc:BaseAmount currencyID="EUR">199.00</cbc:BaseAmount>
+		</cac:AllowanceCharge>
+		<cac:TaxTotal>
+			<cbc:TaxAmount currencyID="EUR">340.29</cbc:TaxAmount>
+			<cac:TaxSubtotal>
+				<cbc:TaxableAmount currencyID="EUR">1791.00</cbc:TaxableAmount>
+				<cbc:TaxAmount currencyID="EUR">340.29</cbc:TaxAmount>
+				<cbc:Percent>19.00</cbc:Percent>
+				<cac:TaxCategory>
+					<cac:TaxScheme/>
+				</cac:TaxCategory>
+			</cac:TaxSubtotal>
+		</cac:TaxTotal>
+		<cac:Item>
+			<cbc:Description>Dit is een TEST HP iPAQ 114 Hand held device voor navigatie </cbc:Description>
+			<cbc:CatalogueIndicator>false</cbc:CatalogueIndicator>
+			<cbc:Name>TEST HP iPAQ 114</cbc:Name>
+			<cac:BuyersItemIdentification>
+				<cbc:ID>19816</cbc:ID>
+			</cac:BuyersItemIdentification>
+			<cac:SellersItemIdentification>
+				<cbc:ID>iPAQ 114 </cbc:ID>
+			</cac:SellersItemIdentification>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="EUR">179.10</cbc:PriceAmount>
+			<cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+		</cac:Price>
+	</cac:InvoiceLine>
+	<cac:InvoiceLine>
+		<cbc:ID>002</cbc:ID>
+		<cbc:InvoicedQuantity unitCode="C62">80</cbc:InvoicedQuantity>
+		<cbc:LineExtensionAmount currencyID="EUR">20592.00</cbc:LineExtensionAmount>
+		<cbc:FreeOfChargeIndicator>false</cbc:FreeOfChargeIndicator>
+		<cac:OrderLineReference>
+			<cbc:LineID>02</cbc:LineID>
+			<cac:OrderReference>
+				<cbc:ID>00168</cbc:ID>
+			</cac:OrderReference>
+		</cac:OrderLineReference>
+		<cac:AllowanceCharge>
+			<cbc:ID>A-2BC</cbc:ID>
+			<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+			<cbc:MultiplierFactorNumeric>40.00</cbc:MultiplierFactorNumeric>
+			<cbc:Amount currencyID="EUR">0</cbc:Amount>
+			<cbc:BaseAmount currencyID="EUR">429.00</cbc:BaseAmount>
+		</cac:AllowanceCharge>
+		<cac:TaxTotal>
+			<cbc:TaxAmount currencyID="EUR">3912.48</cbc:TaxAmount>
+			<cac:TaxSubtotal>
+				<cbc:TaxableAmount currencyID="EUR">20592.00</cbc:TaxableAmount>
+				<cbc:TaxAmount currencyID="EUR">3912.48</cbc:TaxAmount>
+				<cbc:Percent>19.00</cbc:Percent>
+				<cac:TaxCategory>
+					<cac:TaxScheme/>
+				</cac:TaxCategory>
+			</cac:TaxSubtotal>
+		</cac:TaxTotal>
+		<cac:Item>
+			<cbc:Description>DIT IS EEN TEST HTC Hero Absolute White Hand held device voor navigatie  en telefoon toepassingen</cbc:Description>
+			<cbc:CatalogueIndicator>false</cbc:CatalogueIndicator>
+			<cbc:Name>TEST HTC Hero Absolute</cbc:Name>
+			<cac:BuyersItemIdentification>
+				<cbc:ID>16516</cbc:ID>
+			</cac:BuyersItemIdentification>
+			<cac:SellersItemIdentification>
+				<cbc:ID>HTC Hero</cbc:ID>
+			</cac:SellersItemIdentification>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="EUR">257.40</cbc:PriceAmount>
+			<cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+		</cac:Price>
+	</cac:InvoiceLine>
+</nl-inv:Invoice>

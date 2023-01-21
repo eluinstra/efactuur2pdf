@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc:Invoice 
+xmlns:doc="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" 
+xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" 
+xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+	<!--
+=========================================================================================	
+NLCIUS settings
+=========================================================================================	
+	-->
+	<cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0</cbc:CustomizationID>
+	<!--
+=========================================================================================	
+Factuur kopgegevens
+=========================================================================================	
+	-->	
+	<cbc:ID>Factuurscenario2</cbc:ID>
+	<cbc:IssueDate>2019-10-01</cbc:IssueDate>
+	<cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+	<cbc:Note>Technisch minimale factuur</cbc:Note>
+	<cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+	<cbc:BuyerReference>45856478</cbc:BuyerReference>
+	<!--	
+=========================================================================================	
+AccountingSupplierParty
+=========================================================================================	
+	-->	<cac:AccountingSupplierParty>
+		<cac:Party>
+			<cac:PostalAddress>
+				<cbc:StreetName>Kerkstraat 2</cbc:StreetName>
+				<cbc:CityName>Amsterdam</cbc:CityName>
+				<cbc:PostalZone>AA</cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode>NL</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>NL8200.98.395.B.01</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Leverancier B.V.</cbc:RegistrationName>
+				<cbc:CompanyID schemeID="0106">32141305</cbc:CompanyID>
+			</cac:PartyLegalEntity>
+		</cac:Party>
+	</cac:AccountingSupplierParty>
+	<!--
+=========================================================================================	
+AccountingCustomerParty
+=========================================================================================	
+	-->
+	<cac:AccountingCustomerParty>
+		<cac:Party>
+			<cac:PostalAddress>
+				<cbc:StreetName>Postbus 96810</cbc:StreetName>
+				<cbc:CityName>Den Haag</cbc:CityName>
+				<cbc:PostalZone>2509 JE</cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode>NL</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Logius</cbc:RegistrationName>
+				<cbc:CompanyID schemeID="0190">00000004003214345001</cbc:CompanyID>
+			</cac:PartyLegalEntity>
+		</cac:Party>
+	</cac:AccountingCustomerParty>
+<!-- 
+==========================================================================	
+Financiele gegevens
+==========================================================================
+-->	
+	<cac:PaymentMeans>
+		<cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
+		<cac:PayeeFinancialAccount>
+			<cbc:ID>NL02ABNA0123456789</cbc:ID>
+		</cac:PayeeFinancialAccount>
+	</cac:PaymentMeans>
+	<cac:PaymentTerms>
+		<cbc:Note>30 dagen</cbc:Note>
+	</cac:PaymentTerms>
+	<cac:TaxTotal>
+		<cbc:TaxAmount currencyID="EUR">30.00</cbc:TaxAmount>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">100.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>Z</cbc:ID>
+				<cbc:Percent>0</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">100.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">9</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>9</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID="EUR">100.00</cbc:TaxableAmount>
+			<cbc:TaxAmount currencyID="EUR">21.00</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>21</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>		
+	</cac:TaxTotal>
+	<cac:LegalMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID="EUR">300</cbc:LineExtensionAmount>
+		<cbc:TaxExclusiveAmount currencyID="EUR">300</cbc:TaxExclusiveAmount>
+		<cbc:TaxInclusiveAmount currencyID="EUR">330</cbc:TaxInclusiveAmount>
+		<cbc:PayableAmount currencyID="EUR">330</cbc:PayableAmount>
+	</cac:LegalMonetaryTotal>
+	<!--
+=========================================================================================	
+InvoiceLine #1 
+=========================================================================================	
+	-->	
+	<cac:InvoiceLine>
+		<cbc:ID>1</cbc:ID>
+		<cbc:InvoicedQuantity unitCode="EA">10</cbc:InvoicedQuantity>
+		<cbc:LineExtensionAmount currencyID="EUR">100</cbc:LineExtensionAmount>
+		<cac:Item>
+			<cbc:Name>Artikelnaam factuurregel 1 BTW21% (verplicht veld)</cbc:Name>
+			<cac:ClassifiedTaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>21</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:ClassifiedTaxCategory>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="EUR">10</cbc:PriceAmount>
+		</cac:Price>
+	</cac:InvoiceLine>
+		<!--
+=========================================================================================	
+InvoiceLine #2
+=========================================================================================	
+	-->
+	<cac:InvoiceLine>
+		<cbc:ID>2</cbc:ID>
+		<cbc:InvoicedQuantity unitCode="EA">10</cbc:InvoicedQuantity>
+		<cbc:LineExtensionAmount currencyID="EUR">100</cbc:LineExtensionAmount>
+		<cac:Item>
+			<cbc:Name>Artikelnaam factuurregel 2 BTW0% (verplicht veld)</cbc:Name>
+			<cac:ClassifiedTaxCategory>
+				<cbc:ID>Z</cbc:ID>
+				<cbc:Percent>0</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:ClassifiedTaxCategory>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="EUR">10</cbc:PriceAmount>
+		</cac:Price>
+	</cac:InvoiceLine>
+	<!--
+=========================================================================================	
+InvoiceLine #3
+=========================================================================================	
+	-->	
+	<cac:InvoiceLine>
+		<cbc:ID>3</cbc:ID>
+		<cbc:InvoicedQuantity unitCode="EA">10</cbc:InvoicedQuantity>
+		<cbc:LineExtensionAmount currencyID="EUR">100</cbc:LineExtensionAmount>
+		<cac:Item>
+			<cbc:Name>Artikelnaam factuurregel 3 BTW 9%(verplicht veld)</cbc:Name>
+			<cac:ClassifiedTaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>9</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:ClassifiedTaxCategory>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID="EUR">10</cbc:PriceAmount>
+		</cac:Price>
+	</cac:InvoiceLine>
+</doc:Invoice>

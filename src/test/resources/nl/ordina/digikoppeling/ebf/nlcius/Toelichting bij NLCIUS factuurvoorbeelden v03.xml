@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML>
+<!--
+=========================================================================================	
+Gebruikte testdata generiek
+=========================================================================================	
+Factuurnummer:		FactuurscenarioX
+Factuurdatum:		1 oktober 2019
+Ordernummer:		45856478
+	
+AccountingSupplierParty
+Leverancier naam: 	Leverancier B.V.
+KvK nummer:			32141305
+IBAN:				NL02ABNA0123456789
+
+AccountingCustomerParty
+Klant naam:			Logius
+OIN:				00000004003214345001
+-->
+<!--
+=========================================================================================	
+Factuurscenario 1 
+=========================================================================================	
+	-3 factuuregels, met 9% en 21% BTW
+	-Ordernummer
+	-met betaalkenmerk (PaymentID)
+-->
+<!--
+=========================================================================================	
+Factuurscenario 2 
+=========================================================================================	
+	-minimale elementen op kop en regel (en minimale attributen)
+	-3 factuuregels  met 0%, 9% en 21% BTW
+	-
+-->
+<!--
+=========================================================================================	
+Factuurscenario 3a	
+=========================================================================================	
+	-BuyerReference vulling ipv OrderReference
+	-1 factuuregel 21% BTW
+	-met 1 embedded PDF bijlage
+-->
+<!--
+=========================================================================================	
+Factuurscenario 3b	
+=========================================================================================	
+	-BuyerReference vulling ipv OrderReference
+	-1 factuuregel 21% BTW
+	-met 2 embedded bijlagen in PDF
+-->
+<!--
+=========================================================================================	
+Factuurscenario 3c	
+=========================================================================================	
+	-BuyerReference vulling ipv OrderReference
+	-1 factuuregel 21% BTW
+	-met 2 embedded bijlagen waarvan de eerste in JPG en de tweede in EXCEL
+-->
+<!--
+=========================================================================================	
+Factuurscenario 4
+=========================================================================================	
+	-Factuur met Payeeparty (ander begunstigde voor betaling)
+-->
+<!--
+=========================================================================================	
+Factuurscenario 5  
+=========================================================================================	
+	-Factuur met 2 factuurregels waarvan 1 regel met een korting op regel
+		-regel 1 	+1.100 (korting -100)  = 1.000
+		-regel 2 	+250
+		-Totaal 	+1.250 (te betalen) (ex BTW)
+-->
+<!--
+=========================================================================================	
+Factuurscenario 6 
+=========================================================================================	
+	-Factuur met 2 factuurregels waarvan 1 regel met een toeslag op regel
+		-regel 1 	+900 (toeslag +100) = 1.000
+		-regel 2 	+250
+		-Totaal 	+1.250 (te betalen)
+-->
+<!--
+=========================================================================================	
+Factuurscenario 7  
+=========================================================================================	
+	-Factuur met 2 factuurregels en  korting op kop
+		-regel 1 	+1.100 
+		-regel 2 	+250
+		-korting    -100 (embalage retour)
+		-Totaal 	+1.250 (te betalen)
+-->
+<!--
+=========================================================================================	
+Factuurscenario 8 
+=========================================================================================	
+	-Factuur met 2 factuurregels en  korting op prijs
+		-regel 1 	+1.000  = 10 * (120-20)
+		-regel 2 	+250
+		-Totaal 	+1.250 (te betalen)
+-->
+<!--
+==========================================================================================	
+Factuurscenario 9 
+=========================================================================================	
+	-Factuur gemixt met 2 factuurregels (plus en min)
+		-regel 1 	+1500
+		-regel 2 	-250
+		-Totaal 	+1000 (te betalen)
+	-
+	-
+-->
+<!--
+=========================================================================================	
+Factuurscenario 10 
+=========================================================================================	
+	-Factuur bedrag te ontvangen (negatieve factuur 384) en BillingReference
+	-regel1 	-1000
+	-regel2		-250
+	-Totaal 	-1250 (te ontvangen)
+-->
+</XML>

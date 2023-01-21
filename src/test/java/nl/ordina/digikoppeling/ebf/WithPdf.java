@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.ordina.digikoppeling.ebf.model;
+package nl.ordina.digikoppeling.ebf;
 
 
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
-import nl.clockwork.efactuur.Constants;
+import java.io.IOException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 
-@Value
-@AllArgsConstructor
-@Builder
-public class MessageVersion implements Serializable
+public interface WithPdf
 {
-	@NonNull
-	Constants.MessageType type;
-	@NonNull
-	Constants.MessageFormat format;
-	@NonNull
-	String version;
+
+	default PDDocument loadPdfDocument(byte[] inputStream) throws IOException
+	{
+		return PDDocument.load(inputStream);
+	}
+
+	default String toString(PDDocument document) throws IOException
+	{
+		return new PDFTextStripper().getText(document);
+	}
 }

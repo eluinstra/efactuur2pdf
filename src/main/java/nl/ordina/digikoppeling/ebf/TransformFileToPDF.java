@@ -52,7 +52,7 @@ import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.MimeConstants;
+import org.apache.xmlgraphics.util.MimeConstants;
 import org.xml.sax.SAXException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -89,7 +89,7 @@ public class TransformFileToPDF implements SystemInterface
 		println("PDF file " + filename + ".pdf created");
 	}
 
-	private byte[] createPDF(final byte[] content, final MessageVersion messageVersion)
+	byte[] createPDF(final byte[] content, final MessageVersion messageVersion)
 			throws ValidationException, IOException, TransformerException, VersionNotFoundException, SAXException, URISyntaxException
 	{
 		val messageTransformer = new TransformFileToPDF();

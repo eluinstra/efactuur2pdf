@@ -1,4 +1,9 @@
 .classpath
+.factorypath
 .project
 .settings
+dependency-reduced-pom.xml
 target
+
+.vscode
+*.code-workspace

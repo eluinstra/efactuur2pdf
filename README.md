@@ -47,3 +47,24 @@ Transform all files in directory
 java -jar efactuur2pdf-2.1.0.jar nl.ordina.digikoppeling.ebf.TransformDirToPDFs <path>
 ```
 
+### Building
+
+#### Reporting
+
+```bash
+mvn site
+# or to generate individual reports:
+mvn jacoco:report
+mvn cobertura:cobertura
+mvn org.owasp:dependency-check-maven:check
+mvn checkstyle:checkstyle
+mvn jdepend:generate
+mvn jxr:jxr
+mvn jxr:test-jxr
+mvn pmd:pmd
+mvn surefire:test
+mvn com.github.spotbugs:spotbugs-maven-plugin:check
+mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
+mvn taglist:taglist
+```
+
