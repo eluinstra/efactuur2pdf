@@ -45,7 +45,7 @@ public class DynamicInvoiceSchematronValidator implements WithValidator
 	{
 		try
 		{
-			return versionResolver.getSchematronXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
+			return versionResolver.getSchematronXslPath(messageType.getType(), messageType.getFormat(), messageType.getVersion());
 		}
 		catch (VersionNotFoundException e)
 		{

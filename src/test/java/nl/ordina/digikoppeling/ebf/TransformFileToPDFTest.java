@@ -48,7 +48,7 @@ public class TransformFileToPDFTest implements WithPdf
 	@MethodSource("afleverberichten")
 	void transformFileToPDF(String invoice, MessageVersion messageVersion) throws Exception
 	{
-		val result = new TransformFileToPDF().createPDF(invoice.getBytes(),messageVersion);
+		val result = new TransformFileToPDF().createPDF(invoice.getBytes(), messageVersion);
 		val pdf = loadPdfDocument(result);
 		assertThat(pdf.getNumberOfPages()).isEqualTo(1);
 		val content = toString(pdf);
@@ -62,40 +62,41 @@ public class TransformFileToPDFTest implements WithPdf
 
 	private static Stream<Arguments> afleverberichten() throws URISyntaxException, IOException
 	{
-		return Stream.of(arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 01.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 02.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 04.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03a.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03b.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03c.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 05.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 06.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 07.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 08.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 09.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 10.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.0-Example00.xml"),messageVersion(MESSAGE_VERSION_UBL_1_1)),
+		return Stream.of(
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 01.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 02.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 04.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03a.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03b.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03c.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 05.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 06.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 07.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 08.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 09.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 10.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.0-Example00.xml"), messageVersion(MESSAGE_VERSION_UBL_1_1)),
 				// arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.0-Example01.xml"),messageVersion(MESSAGE_VERSION_UBL_1_1)),
 				// arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.0-Example02.xml"),messageVersion(MESSAGE_VERSION_UBL_1_1)),
 				// arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.0-Example03.xml"),messageVersion(MESSAGE_VERSION_UBL_1_1)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.2-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_6_2)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.2-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_6_2)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.3-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_6_3)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.3-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_6_3)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_7)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_7)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7c-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_7)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7c-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_7)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_8)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_8)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-beta2-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_8_beta2)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-beta2-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_8_beta2)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.9-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_9)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.9-Example14.xml"),messageVersion(MESSAGE_VERSION_UBL_1_9)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.9-Example07.xml"),messageVersion(MESSAGE_VERSION_UBL_1_9)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.9-Example08.xml"),messageVersion(MESSAGE_VERSION_UBL_1_9)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.9-Example09.xml"),messageVersion(MESSAGE_VERSION_UBL_1_9)),
-				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-2.0-Example.xml"),messageVersion(MESSAGE_VERSION_UBL_2_0)));
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.2-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_6_2)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.2-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_6_2)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.3-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_6_3)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.6.3-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_6_3)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_7)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_7)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7c-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_7)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.7c-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_7)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_8)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_8)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-beta2-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_8_beta2)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.8-beta2-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_8_beta2)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.9-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_9)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-1.9-Example14.xml"), messageVersion(MESSAGE_VERSION_UBL_1_9)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.9-Example07.xml"), messageVersion(MESSAGE_VERSION_UBL_1_9)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.9-Example08.xml"), messageVersion(MESSAGE_VERSION_UBL_1_9)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-NL-Invoice-1.9-Example09.xml"), messageVersion(MESSAGE_VERSION_UBL_1_9)),
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/ubl/UBL-Invoice-2.0-Example.xml"), messageVersion(MESSAGE_VERSION_UBL_2_0)));
 	}
 
 	private static MessageVersion messageVersion(String messageVersion)
@@ -109,7 +110,7 @@ public class TransformFileToPDFTest implements WithPdf
 	{
 		val messageVersion = messageVersion(MESSAGE_VERSION_UBL_2_0);
 		val result =
-				new TransformFileToPDF().createPDF(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 01a.xml").getBytes(),messageVersion);
+				new TransformFileToPDF().createPDF(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 01a.xml").getBytes(), messageVersion);
 		val pdf = loadPdfDocument(result);
 		assertThat(pdf.getNumberOfPages()).isEqualTo(1);
 		val content = toString(pdf);

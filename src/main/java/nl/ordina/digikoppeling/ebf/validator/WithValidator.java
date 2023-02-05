@@ -24,7 +24,7 @@ import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 
 public interface WithValidator
 {
-	default Function<String,String> transform(byte[] xml) throws ValidationException
+	default Function<String, String> transform(byte[] xml) throws ValidationException
 	{
 		return xslFile ->
 		{
@@ -35,23 +35,23 @@ public interface WithValidator
 			}
 			catch (TransformerException e)
 			{
-				throw new ValidationException(transformer.getXslErrors(),e);
+				throw new ValidationException(transformer.getXslErrors(), e);
 			}
 		};
 	}
 
-	default Function<String,String> filterErrors(boolean failOnWarning) throws ValidationException
+	default Function<String, String> filterErrors(boolean failOnWarning) throws ValidationException
 	{
 		return xml ->
 		{
 			val transformer = XSLTransformer.getInstance("/nl/ordina/digikoppeling/ebf/xslt/ErrorFilter.xsl");
 			try
 			{
-				return transformer.transform(xml,new SimpleEntry<String,Object>("failOnWarning",failOnWarning ? "true" : "false"));
+				return transformer.transform(xml, new SimpleEntry<String, Object>("failOnWarning", failOnWarning ? "true" : "false"));
 			}
 			catch (TransformerException e)
 			{
-				throw new ValidationException(transformer.getXslErrors(),e);
+				throw new ValidationException(transformer.getXslErrors(), e);
 			}
 		};
 	}

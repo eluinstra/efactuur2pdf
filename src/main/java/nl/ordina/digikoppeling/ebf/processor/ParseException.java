@@ -26,7 +26,7 @@ public class ParseException extends Exception
 
 	public ParseException(String message, Exception cause)
 	{
-		super(message,cause);
+		super(message, cause);
 	}
 
 	public ParseException(Throwable exception)

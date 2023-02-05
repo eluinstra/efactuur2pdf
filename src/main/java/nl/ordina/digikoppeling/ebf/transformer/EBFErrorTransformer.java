@@ -37,7 +37,7 @@ public class EBFErrorTransformer
 		val afleverError = knownValidationException(throwable) ? AFSErrorCode.AFS100 : AFSErrorCode.AFS400;
 		val foutcode = afleverError.foutCode();
 		val foutbeschrijving = afleverError.foutBeschrijving() + "\nFoutmelding:\n" + throwable.getMessage();
-		return new EBFError(foutcode,foutbeschrijving);
+		return new EBFError(foutcode, foutbeschrijving);
 	}
 
 	private boolean knownValidationException(Throwable throwable)

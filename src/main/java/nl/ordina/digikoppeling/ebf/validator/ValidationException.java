@@ -26,7 +26,7 @@ public class ValidationException extends ValidatorException
 
 	public ValidationException(String message, Throwable e)
 	{
-		super(message,e);
+		super(message, e);
 	}
 
 	public ValidationException(Throwable exception)

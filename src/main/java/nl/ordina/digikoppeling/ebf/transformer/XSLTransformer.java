@@ -50,7 +50,7 @@ import org.apache.commons.io.input.BOMInputStream;
 @RequiredArgsConstructor
 public class XSLTransformer
 {
-	private static Map<String,Templates> templatesCache = new HashMap<>();
+	private static Map<String, Templates> templatesCache = new HashMap<>();
 	@NonNull
 	Templates templates;
 	@NonFinal
@@ -58,7 +58,7 @@ public class XSLTransformer
 
 	public static XSLTransformer getInstance(String xslFile)
 	{
-		return new XSLTransformer(templatesCache.computeIfAbsent(xslFile,XSLTransformer::getTemplates));
+		return new XSLTransformer(templatesCache.computeIfAbsent(xslFile, XSLTransformer::getTemplates));
 	}
 
 	private static Templates getTemplates(String xslFile)
@@ -66,7 +66,7 @@ public class XSLTransformer
 		try
 		{
 			val tf = XSLTransformer.createSaxonTransformerFactory();
-			return tf.newTemplates(new StreamSource(XSLTransformer.class.getResourceAsStream(xslFile),XSLTransformer.class.getResource(xslFile).toString()));
+			return tf.newTemplates(new StreamSource(XSLTransformer.class.getResourceAsStream(xslFile), XSLTransformer.class.getResource(xslFile).toString()));
 		}
 		catch (TransformerConfigurationException e)
 		{
@@ -76,27 +76,27 @@ public class XSLTransformer
 
 	public static TransformerFactory createSaxonTransformerFactory() throws TransformerFactoryConfigurationError
 	{
-		val tf = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl",null);
-		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD,"");
-		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET,"");
+		val tf = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 		return tf;
 	}
 
-	public String transform(String xml, Entry<String,Object>...parameters) throws TransformerException
+	public String transform(String xml, Entry<String, Object>...parameters) throws TransformerException
 	{
 		val transformer = createTransformer();
 		logger = setLogger(transformer);
 		for (val p : parameters)
-			transformer.setParameter(p.getKey(),p.getValue());
+			transformer.setParameter(p.getKey(), p.getValue());
 		val source = new StreamSource(new StringReader(xml));
-		return transform(transformer,source);
+		return transform(transformer, source);
 	}
 
 	private Transformer createTransformer() throws TransformerConfigurationException
 	{
 		val transformer = templates.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT,"yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		return transformer;
 	}
 
@@ -117,7 +117,7 @@ public class XSLTransformer
 	private String transform(Transformer transformer, StreamSource xmlsource) throws TransformerException
 	{
 		val writer = new StringWriter();
-		transformer.transform(xmlsource,new StreamResult(writer));
+		transformer.transform(xmlsource, new StreamResult(writer));
 		writer.flush();
 		return writer.toString();
 	}
@@ -132,7 +132,7 @@ public class XSLTransformer
 		val transformer = createTransformer();
 		logger = setLogger(transformer);
 		val source = new StreamSource(new BOMInputStream(xml));
-		return transform(transformer,source);
+		return transform(transformer, source);
 	}
 
 	public String getXslErrors()

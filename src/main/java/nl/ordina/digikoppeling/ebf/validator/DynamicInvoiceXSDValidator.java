@@ -43,14 +43,14 @@ public class DynamicInvoiceXSDValidator
 
 	public void validate(byte[] content, MessageVersion messageType) throws ValidatorException
 	{
-		getXsdFile(messageType).ifPresent(xsdFile -> validate(xsdFile,content));
+		getXsdFile(messageType).ifPresent(xsdFile -> validate(xsdFile, content));
 	}
 
 	private Optional<String> getXsdFile(MessageVersion messageType) throws ValidationException
 	{
 		try
 		{
-			return versionResolver.getXsdPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
+			return versionResolver.getXsdPath(messageType.getType(), messageType.getFormat(), messageType.getVersion());
 		}
 		catch (VersionNotFoundException e)
 		{
@@ -75,7 +75,7 @@ public class DynamicInvoiceXSDValidator
 	private Schema getSchema(String xsdFile) throws SAXException
 	{
 		val factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		val source = new StreamSource(getClass().getResourceAsStream(xsdFile),getClass().getResource(xsdFile).toString());
+		val source = new StreamSource(getClass().getResourceAsStream(xsdFile), getClass().getResource(xsdFile).toString());
 		return factory.newSchema(source);
 	}
 }

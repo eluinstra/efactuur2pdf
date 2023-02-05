@@ -39,12 +39,12 @@ public class MessageParser
 			readStartElement(reader);
 			val messageFormat = getMessageFormat(reader);
 			val messageType = getMessageType(reader);
-			val messageVersion = getMessageVersion(reader,messageFormat);
-			return new MessageVersion(messageType,messageFormat,messageVersion);
+			val messageVersion = getMessageVersion(reader, messageFormat);
+			return new MessageVersion(messageType, messageFormat, messageVersion);
 		}
 		catch (XMLStreamException e)
 		{
-			throw new ParseException("Could not parse EBF message",e);
+			throw new ParseException("Could not parse EBF message", e);
 		}
 	}
 
@@ -91,10 +91,7 @@ public class MessageParser
 	private Optional<MessageType> getMessageType(String rootElementName)
 	{
 		val messageType = Constants.rootTagToMessageType.get(rootElementName);
-		if (messageType != null)
-			return Optional.of(messageType);
-		else
-			return Optional.empty();
+		return messageType != null ? Optional.of(messageType) : Optional.empty();
 	}
 
 	private String getUBLVersion(String idElementText) throws ParseException
@@ -131,23 +128,23 @@ public class MessageParser
 
 	private String getCustomizationId(XMLStreamReader reader) throws XMLStreamException
 	{
-		do
+		while (reader.hasNext())
 		{
 			readStartElement(reader);
 			if (reader.getLocalName().equals("CustomizationID"))
 				return reader.getElementText();
-		} while (reader.hasNext());
+		}
 		return null;
 	}
 
 	private String getAdditionalRequirement(XMLStreamReader reader) throws XMLStreamException
 	{
-		do
+		while (reader.hasNext())
 		{
 			readStartElement(reader);
-			if (reader.getLocalName().equals("AdditionalRequirement") && reader.getAttributeValue("","requirementTitle").equals("VersionId"))
+			if (reader.getLocalName().equals("AdditionalRequirement") && reader.getAttributeValue("", "requirementTitle").equals("VersionId"))
 				return reader.getElementText();
-		} while (reader.hasNext());
+		}
 		return null;
 	}
 

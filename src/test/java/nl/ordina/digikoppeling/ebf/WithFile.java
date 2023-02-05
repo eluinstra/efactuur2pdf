@@ -30,7 +30,7 @@ public interface WithFile
 	{
 		Path filePath = Paths.get(ClassLoader.getSystemResource(path).toURI());
 		StringBuilder contentBuilder = new StringBuilder();
-		try (Stream<String> stream = Files.lines(filePath,StandardCharsets.UTF_8))
+		try (Stream<String> stream = Files.lines(filePath, StandardCharsets.UTF_8))
 		{
 			stream.forEach(s -> contentBuilder.append(s).append("\n"));
 		}

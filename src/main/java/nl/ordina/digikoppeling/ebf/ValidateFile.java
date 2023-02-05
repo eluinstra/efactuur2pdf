@@ -71,13 +71,13 @@ public class ValidateFile implements SystemInterface
 			println("MessageFormat: " + messageVersion.getFormat());
 			println("MessageVersion: " + messageVersion.getVersion());
 			val xsdValidator = new DynamicInvoiceXSDValidator(new DigikoppelingVersionHelper());
-			xsdValidator.validate(content,messageVersion);
-			val schematronValidator = new DynamicInvoiceSchematronValidator(new DigikoppelingVersionHelper(),failOnWarning);
-			schematronValidator.validate(content,messageVersion);
+			xsdValidator.validate(content, messageVersion);
+			val schematronValidator = new DynamicInvoiceSchematronValidator(new DigikoppelingVersionHelper(), failOnWarning);
+			schematronValidator.validate(content, messageVersion);
 			if (messageVersion.getFormat().equals(Constants.MessageFormat.UBL))
 			{
 				val genericodeValidator = new DynamicInvoiceGenericodeValidator(new DigikoppelingVersionHelper());
-				genericodeValidator.validate(content,messageVersion);
+				genericodeValidator.validate(content, messageVersion);
 				val customValidator = new CustomValidator();
 				customValidator.validate(content);
 			}

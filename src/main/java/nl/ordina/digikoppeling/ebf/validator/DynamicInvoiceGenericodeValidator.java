@@ -42,7 +42,7 @@ public class DynamicInvoiceGenericodeValidator implements WithValidator
 	{
 		try
 		{
-			return versionResolver.getGenericodeXslPath(messageType.getType(),messageType.getFormat(),messageType.getVersion());
+			return versionResolver.getGenericodeXslPath(messageType.getType(), messageType.getFormat(), messageType.getVersion());
 		}
 		catch (VersionNotFoundException e)
 		{

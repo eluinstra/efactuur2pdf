@@ -22,11 +22,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.stream.Stream;
 import javax.xml.transform.TransformerConfigurationException;
-import lombok.val;
-import nl.clockwork.efactuur.Constants;
-import nl.clockwork.efactuur.Constants.MessageFormat;
-import nl.clockwork.efactuur.Constants.MessageType;
-import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.validator.ValidatorException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +40,8 @@ public class ValidateFileTest
 
 	private static Stream<Arguments> validInvoices() throws URISyntaxException, IOException
 	{
-		return Stream.of(arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 01.xml")),
+		return Stream.of(
+				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 01.xml")),
 				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 02.xml")),
 				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 04.xml")),
 				arguments(WithFile.readFile("nl/ordina/digikoppeling/ebf/nlcius/NLCIUS e-factuur vb 03a.xml")),
