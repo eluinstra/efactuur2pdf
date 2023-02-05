@@ -154,9 +154,9 @@ public class TransformFileToPDF implements SystemInterface
 
 	private ErrorListener createErrorListener(Logger logger)
 	{
-		val listener = new StandardErrorListener();
-		listener.setLogger(logger);
-		return listener;
+		val result = new StandardErrorListener();
+		result.setLogger(logger);
+		return result;
 	}
 
 	private Transformer createTransformer(Templates templates, String messageId, MessageVersion messageVersion, String berichtSoort)

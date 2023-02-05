@@ -76,10 +76,10 @@ public class XSLTransformer
 
 	public static TransformerFactory createSaxonTransformerFactory() throws TransformerFactoryConfigurationError
 	{
-		val tf = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
-		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
-		return tf;
+		val result = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+		result.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		result.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+		return result;
 	}
 
 	public String transform(String xml, Entry<String, Object>...parameters) throws TransformerException
@@ -94,10 +94,10 @@ public class XSLTransformer
 
 	private Transformer createTransformer() throws TransformerConfigurationException
 	{
-		val transformer = templates.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		return transformer;
+		val result = templates.newTransformer();
+		result.setOutputProperty(OutputKeys.INDENT, "yes");
+		result.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		return result;
 	}
 
 	private StringLogger setLogger(final Transformer transformer)
@@ -109,9 +109,9 @@ public class XSLTransformer
 
 	private ErrorListener createErrorListener(Logger logger)
 	{
-		val listener = new StandardErrorListener();
-		listener.setLogger(logger);
-		return listener;
+		val result = new StandardErrorListener();
+		result.setLogger(logger);
+		return result;
 	}
 
 	private String transform(Transformer transformer, StreamSource xmlsource) throws TransformerException

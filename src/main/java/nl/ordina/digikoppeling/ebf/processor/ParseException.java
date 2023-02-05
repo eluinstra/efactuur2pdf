@@ -15,7 +15,7 @@
  */
 package nl.ordina.digikoppeling.ebf.processor;
 
-public class ParseException extends Exception
+public class ParseException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
 
