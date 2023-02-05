@@ -5,10 +5,7 @@
 
 The following HR-XML-NL and UBL-NL message versions are currently supported in this project :
 - NLCIUS
-- si-ubl-2.0.3.2
-- si-ubl-2.0.3.1 (=default)
-- si-ubl-2.0.2
-- si-ubl-2.0.1
+- si-ubl-2.0.3.5
 - UBL Invoice 1.9
 - UBL Invoice 1.8
 - UBL Invoice 1.7
@@ -26,28 +23,34 @@ The following HR-XML-NL and UBL-NL message versions are currently supported in t
 Validate file
 
 ```
-java -jar efactuur2pdf-2.1.0.jar nl.ordina.digikoppeling.ebf.ValidateFile <filename>
+java -jar efactuur2pdf-3.0.0.jar nl.ordina.digikoppeling.ebf.ValidateFile <filename>
 ```
 
 Validate all files in directory
 
 ```
-java -jar efactuur2pdf-2.1.0.jar nl.ordina.digikoppeling.ebf.ValidateDir <path>
+java -jar efactuur2pdf-3.0.0.jar nl.ordina.digikoppeling.ebf.ValidateDir <path>
 ```
 
 Transform file
 
 ```
-java -jar efactuur2pdf-2.1.0.jar nl.ordina.digikoppeling.ebf.TransformFileToPDF <filename>
+java -jar efactuur2pdf-3.0.0.jar nl.ordina.digikoppeling.ebf.TransformFileToPDF <filename>
 ```
 
 Transform all files in directory
 
 ```
-java -jar efactuur2pdf-2.1.0.jar nl.ordina.digikoppeling.ebf.TransformDirToPDFs <path>
+java -jar efactuur2pdf-3.0.0.jar nl.ordina.digikoppeling.ebf.TransformDirToPDFs <path>
 ```
 
 ### Building
+
+#### Packaging
+
+```bash
+mvn clean package
+```
 
 #### Reporting
 
@@ -67,4 +70,3 @@ mvn com.github.spotbugs:spotbugs-maven-plugin:check
 mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
 mvn taglist:taglist
 ```
-
