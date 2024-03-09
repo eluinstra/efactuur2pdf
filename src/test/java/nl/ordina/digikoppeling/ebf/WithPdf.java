@@ -17,6 +17,8 @@ package nl.ordina.digikoppeling.ebf;
 
 
 import java.io.IOException;
+
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -25,7 +27,7 @@ public interface WithPdf
 
 	default PDDocument loadPdfDocument(byte[] inputStream) throws IOException
 	{
-		return PDDocument.load(inputStream);
+		return Loader.loadPDF(inputStream);
 	}
 
 	default String toString(PDDocument document) throws IOException
