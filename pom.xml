@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.ordina.digikoppeling.ebf</groupId>
   <artifactId>efactuur2pdf</artifactId>
-  <version>4.0.0</version>
+  <version>4.1.0</version>
   <packaging>jar</packaging>
   <name>Digikoppeling EBF Message Validator and Invoice PDF Generator</name>
   <organization>
