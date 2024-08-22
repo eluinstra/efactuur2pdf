@@ -5,7 +5,7 @@
 
 The following HR-XML-NL and UBL-NL message versions are currently supported in this project :
 - NLCIUS
-- si-ubl-2.0.3.8
+- si-ubl-2.0.3.9
 - UBL Invoice 1.9
 - UBL Invoice 1.8
 - UBL Invoice 1.7
