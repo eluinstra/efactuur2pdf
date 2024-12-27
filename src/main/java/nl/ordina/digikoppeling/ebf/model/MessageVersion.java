@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.model;
 
-
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

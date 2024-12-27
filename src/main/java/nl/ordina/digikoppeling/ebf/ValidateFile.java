@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf;
 
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import javax.xml.transform.TransformerConfigurationException;

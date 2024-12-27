@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-
 import java.util.AbstractMap.SimpleEntry;
 import java.util.function.Function;
 import javax.xml.transform.TransformerException;

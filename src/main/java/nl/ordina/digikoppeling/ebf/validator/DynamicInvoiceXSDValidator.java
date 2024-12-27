@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;

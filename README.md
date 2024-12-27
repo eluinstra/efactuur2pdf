@@ -49,7 +49,7 @@ java -jar efactuur2pdf-4.0.0.jar nl.ordina.digikoppeling.ebf.TransformDirToPDFs 
 #### Packaging
 
 ```bash
-mvn clean package
+mvn -Djava.awt.headless=true -Dawt.toolkit=sun.awt.HToolkit clean package
 ```
 
 #### Reporting

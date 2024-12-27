@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.model;
 
-
 import lombok.Value;
 
 @Value

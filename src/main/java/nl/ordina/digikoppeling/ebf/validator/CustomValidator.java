@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 

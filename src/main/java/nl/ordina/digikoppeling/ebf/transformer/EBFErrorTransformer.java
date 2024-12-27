@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.transformer;
 
-
 import java.util.Arrays;
 import lombok.val;
 import nl.ordina.digikoppeling.ebf.AFSErrorCode;

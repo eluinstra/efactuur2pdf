@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf;
 
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;

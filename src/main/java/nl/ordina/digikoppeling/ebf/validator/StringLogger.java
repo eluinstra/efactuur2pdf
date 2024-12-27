@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-
 import java.io.StringWriter;
 import javax.xml.transform.stream.StreamResult;
 import net.sf.saxon.lib.Logger;

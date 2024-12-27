@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.validator;
 
-
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

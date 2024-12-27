@@ -15,7 +15,6 @@
  */
 package nl.ordina.digikoppeling.ebf.processor;
 
-
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 import javax.xml.stream.XMLInputFactory;
