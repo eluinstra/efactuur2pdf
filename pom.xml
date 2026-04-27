@@ -48,7 +48,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.16.0</version>
+      <version>3.20.0</version>
     </dependency>
     <dependency>
       <groupId>com.lmax</groupId>
@@ -58,12 +58,12 @@
     <dependency>
       <groupId>nl.clockwork.efactuur</groupId>
       <artifactId>efactuur-pdf-nl</artifactId>
-      <version>4.2.0</version>
+      <version>4.3.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
       <artifactId>fop-core</artifactId>
-      <version>2.10</version>
+      <version>2.11</version>
       <exclusions>
         <exclusion>
           <groupId>xalan</groupId>
@@ -74,74 +74,74 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.23.1</version>
+      <version>2.25.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
-      <version>2.23.1</version>
+      <version>2.25.4</version>
     </dependency>
     <dependency>
       <groupId>io.reactivex.rxjava3</groupId>
       <artifactId>rxjava</artifactId>
-      <version>3.1.9</version>
+      <version>3.1.12</version>
     </dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
-      <version>12.5</version>
+      <version>12.9</version>
     </dependency>
     <dependency>
       <groupId>io.vavr</groupId>
       <artifactId>vavr</artifactId>
-      <version>0.10.4</version>
+      <version>1.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.34</version>
+      <version>1.18.46</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.26.3</version>
+      <version>3.27.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>fontbox</artifactId>
-      <version>3.0.3</version>
+      <version>3.0.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.11.0</version>
+      <version>6.0.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.11.0</version>
+      <version>6.0.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.11.0</version>
+      <version>6.0.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.12.0</version>
+      <version>5.23.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>3.0.3</version>
+      <version>3.0.7</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -157,7 +157,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.12</version>
+        <version>0.8.14</version>
         <executions>
           <execution>
             <goals>
@@ -176,7 +176,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
+        <version>3.15.0</version>
         <inherited>true</inherited>
         <configuration>
           <source>${jdk.version}</source>
@@ -189,7 +189,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.2</version>
         <executions>
           <execution>
             <goals>
@@ -202,17 +202,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.20.0</version>
+        <version>3.21.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
+        <version>3.5.5</version>
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.43.0</version>
+        <version>3.4.0</version>
         <configuration>
           <formats>
             <format>
@@ -282,7 +282,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <version>2.17.1</version>
+        <version>2.21.1</version>
         <configuration>
           <excludes>
             <exclude>com.lmax:disruptor</exclude>
@@ -320,7 +320,7 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <version>10.0.3</version>
+        <version>12.2.1</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -332,12 +332,12 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jdepend-maven-plugin</artifactId>
-        <version>2.0</version>
+        <version>2.2.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.4.0</version>
+        <version>3.6.0</version>
         <configuration>
           <detail>true</detail>
           <enableFilesSummary>true</enableFilesSummary>
@@ -357,7 +357,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.12.0</version>
         <configuration>
           <source>${jdk.version}</source>
           <doclint>none</doclint>
@@ -366,12 +366,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>3.4.0</version>
+        <version>3.6.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.24.0</version>
+        <version>3.28.0</version>
         <configuration>
           <linkXref>true</linkXref>
           <targetJdk>${jdk.version}</targetJdk>
@@ -382,14 +382,14 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>4.0.0-M16</version>
+        <version>3.21.0</version>
         <configuration>
           <project>
             <dependencies>
               <dependency>
                 <groupId>org.apache.maven.doxia</groupId>
                 <artifactId>doxia-site-renderer</artifactId>
-                <version>2.0.0-M16</version>
+                <version>2.0.0</version>
               </dependency>
             </dependencies>
           </project>
@@ -398,12 +398,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.4.0</version>
+        <version>3.5.5</version>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.8.6.0</version>
+        <version>4.9.8.3</version>
         <configuration>
           <spotbugsXmlOutputDirectory>${basedir}/target</spotbugsXmlOutputDirectory>
           <xmlOutput>true</xmlOutput>
@@ -416,7 +416,7 @@
             <plugin>
               <groupId>com.h3xstream.findsecbugs</groupId>
               <artifactId>findsecbugs-plugin</artifactId>
-              <version>1.13.0</version>
+              <version>1.14.0</version>
             </plugin>
           </plugins>
         </configuration>
@@ -424,7 +424,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>taglist-maven-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.2</version>
       </plugin>
     </plugins>
   </reporting>
