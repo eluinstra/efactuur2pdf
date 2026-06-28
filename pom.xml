@@ -117,19 +117,19 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>6.0.3</version>
+      <version>6.1.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>6.0.3</version>
+      <version>6.1.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>6.0.3</version>
+      <version>6.1.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -282,14 +282,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <version>2.21.1</version>
-        <configuration>
-          <excludes>
-            <exclude>com.lmax:disruptor</exclude>
-            <exclude>io.vavr:vavr</exclude>
-            <exclude>org.apache.pdfbox</exclude>
-          </excludes>
-        </configuration>
+        <version>2.21.0</version>
       </plugin>
     </plugins>
   </build>
@@ -320,7 +313,7 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <version>12.2.1</version>
+        <version>12.2.2</version>
         <reportSets>
           <reportSet>
             <reports>
@@ -403,7 +396,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.9.8.3</version>
+        <version>4.10.2.0</version>
         <configuration>
           <spotbugsXmlOutputDirectory>${basedir}/target</spotbugsXmlOutputDirectory>
           <xmlOutput>true</xmlOutput>
