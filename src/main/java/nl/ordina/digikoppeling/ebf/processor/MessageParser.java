@@ -31,7 +31,7 @@ public class MessageParser
 {
 	public MessageVersion getMessageVersion(byte[] message) throws ParseException
 	{
-		val factory = XMLInputFactory.newInstance();
+		val factory = createSecureXMLInputFactory();
 		try
 		{
 			val reader = factory.createXMLStreamReader(new BOMInputStream(new ByteArrayInputStream(message)));
@@ -139,5 +139,14 @@ public class MessageParser
 			if (reader.getEventType() == XMLStreamReader.START_ELEMENT)
 				return;
 		}
+	}
+
+	private static XMLInputFactory createSecureXMLInputFactory()
+	{
+		val factory = XMLInputFactory.newInstance();
+		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+		factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+		return factory;
 	}
 }
