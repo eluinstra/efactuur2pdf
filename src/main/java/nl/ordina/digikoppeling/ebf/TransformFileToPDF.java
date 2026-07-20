@@ -19,11 +19,11 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Calendar;
 import java.util.Locale;
 import javax.xml.transform.ErrorListener;
@@ -48,7 +48,6 @@ import nl.ordina.digikoppeling.ebf.processor.MessageParser;
 import nl.ordina.digikoppeling.ebf.processor.ParseException;
 import nl.ordina.digikoppeling.ebf.validator.StringLogger;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
-import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
 import org.apache.xmlgraphics.util.MimeConstants;
@@ -78,13 +77,14 @@ public class TransformFileToPDF implements SystemInterface
 	public void transform(String filename)
 			throws IOException, ParseException, ValidationException, TransformerException, VersionNotFoundException, SAXException, URISyntaxException
 	{
-		val content = IOUtils.toByteArray(new FileInputStream(filename));
+		val path = Path.of(filename);
+		val content = Files.readAllBytes(path);
 		val messageVersion = new MessageParser().getMessageVersion(content);
 		println("MessageType: " + messageVersion.getType());
 		println("MessageFormat: " + messageVersion.getFormat());
 		println("MessageVersion: " + messageVersion.getVersion());
 		val pdf = createPDF(content, messageVersion);
-		IOUtils.write(pdf, new FileOutputStream(filename + ".pdf"));
+		Files.write(path.resolveSibling(path.getFileName() + ".pdf"), pdf);
 		println("PDF file " + filename + ".pdf created");
 	}
 
