@@ -74,8 +74,8 @@ public class DynamicInvoiceXSDValidator
 	private Schema getSchema(String xsdFile) throws SAXException
 	{
 		val factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD,"");
-		factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA,"file,jar");
+		factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,jar");
 		val source = new StreamSource(getClass().getResourceAsStream(xsdFile), getClass().getResource(xsdFile).toString());
 		return factory.newSchema(source);
 	}
