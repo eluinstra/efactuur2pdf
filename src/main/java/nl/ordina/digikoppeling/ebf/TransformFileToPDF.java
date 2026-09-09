@@ -38,7 +38,6 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
-import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
 import nl.clockwork.efactuur.DigikoppelingVersionHelper;
@@ -46,6 +45,7 @@ import nl.clockwork.efactuur.VersionNotFoundException;
 import nl.ordina.digikoppeling.ebf.model.MessageVersion;
 import nl.ordina.digikoppeling.ebf.processor.MessageParser;
 import nl.ordina.digikoppeling.ebf.processor.ParseException;
+import nl.ordina.digikoppeling.ebf.transformer.XSLTransformer;
 import nl.ordina.digikoppeling.ebf.validator.StringLogger;
 import nl.ordina.digikoppeling.ebf.validator.ValidationException;
 import org.apache.fop.apps.FOPException;
@@ -178,6 +178,7 @@ public class TransformFileToPDF implements SystemInterface
 
 	private Templates getSaxonXslTemplates(String xslFile) throws TransformerConfigurationException
 	{
-		return new TransformerFactoryImpl().newTemplates(new StreamSource(getClass().getResourceAsStream(xslFile), getClass().getResource(xslFile).toString()));
+		val tf = XSLTransformer.createSaxonTransformerFactory();
+		return tf.newTemplates(new StreamSource(getClass().getResourceAsStream(xslFile), getClass().getResource(xslFile).toString()));
 	}
 }

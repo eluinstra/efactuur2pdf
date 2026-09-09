@@ -20,7 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.xml.XMLConstants;
@@ -38,7 +39,6 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.val;
 import net.sf.saxon.lib.Logger;
 import net.sf.saxon.lib.StandardErrorListener;
@@ -49,15 +49,32 @@ import org.apache.commons.io.input.BOMInputStream;
 @RequiredArgsConstructor
 public class XSLTransformer
 {
-	private static Map<String, Templates> templatesCache = new HashMap<>();
+	private static final int MAX_CACHE_SIZE = 50;
+	private static final Map<String, Templates> templatesCache = Collections.synchronizedMap(new LinkedHashMap<String, Templates>(MAX_CACHE_SIZE + 1, 0.75f, true)
+	{
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<String, Templates> eldest)
+		{
+			return size() > MAX_CACHE_SIZE;
+		}
+	});
 	@NonNull
 	Templates templates;
-	@NonFinal
-	StringLogger logger;
+	ThreadLocal<StringLogger> logger = new ThreadLocal<>();
 
 	public static XSLTransformer getInstance(String xslFile)
 	{
-		return new XSLTransformer(templatesCache.computeIfAbsent(xslFile, XSLTransformer::getTemplates));
+		Templates cached;
+		synchronized (templatesCache)
+		{
+			cached = templatesCache.get(xslFile);
+			if (cached == null)
+			{
+				cached = getTemplates(xslFile);
+				templatesCache.put(xslFile, cached);
+			}
+		}
+		return new XSLTransformer(cached);
 	}
 
 	private static Templates getTemplates(String xslFile)
@@ -84,7 +101,7 @@ public class XSLTransformer
 	public String transform(String xml, Entry<String, Object>...parameters) throws TransformerException
 	{
 		val transformer = createTransformer();
-		logger = setLogger(transformer);
+		logger.set(setLogger(transformer));
 		for (val p : parameters)
 			transformer.setParameter(p.getKey(), p.getValue());
 		val source = new StreamSource(new StringReader(xml));
@@ -129,14 +146,15 @@ public class XSLTransformer
 	public String transform(InputStream xml) throws TransformerException
 	{
 		val transformer = createTransformer();
-		logger = setLogger(transformer);
+		logger.set(setLogger(transformer));
 		val source = new StreamSource(new BOMInputStream(xml));
 		return transform(transformer, source);
 	}
 
 	public String getXslErrors()
 	{
-		return logger.getLog();
+		val l = logger.get();
+		return l != null ? l.getLog() : null;
 	}
 
 	public static void main(String[] args) throws TransformerException, IOException
